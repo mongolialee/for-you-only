@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A Special Surprise</title>
+    <style>
+        body { background-color: #ffe6e6; text-align: center; font-family: sans-serif; padding-top: 50px; }
+        .box { background: white; padding: 20px; border-radius: 15px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        button { background-color: #ff4d4d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        #message { display: none; margin-top: 20px; color: #ff4d4d; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h1>Hi [HIS NAME]! ❤️</h1>
+        <p>I coded this just for you. Click the button below:</p>
+        <button onclick="reveal()">Open My Heart</button>
+        <div id="message">I love you more than all this code! Happy Anniversary!</div>
+    </div>
+
+    <script>
+        function reveal() {
+            document.getElementById('message').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
