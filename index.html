@@ -34,6 +34,16 @@
             cursor: pointer; 
         }
         #game-content { display: none; } /* makes game invisible */
+        #error-msg, #quest-error {
+            color: #ff6666;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .quest-title {
+            color: #ff4d4d;
+            font-size: 24px;
+            margin-botton: 20px;
+        }
     </style>
 </head>
 <body>
@@ -54,15 +64,15 @@
         <h1>❤️ ACCESS GRANTED ❤️</h1>
         <p>Welcome, Agent Jason. Your mission begins now...</p>
         <div style="font-size: 50px;">🎮</div>
-        <p>Enter to win a special prize!</p>
+        <p>Answer these to win a special prize!</p>
     </div>
 
     <script>
+        // GETTING INTO THE GAME
         function checkPassword() {
             const password = document.getElementById('passwordInput').value;
             
-            // password!!!
-            if (password === "11092023") {
+            if (password === "11092023") { // password!!!
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('game-content').style.display = 'block';
                 document.body.style.backgroundColor = "#ffe6e6"; // Change background to something cute
@@ -71,9 +81,21 @@
                 document.getElementById('error-msg').style.display = 'block';
             }
         }
+
+        // QUEST BEGINS
+        let currentLevel = 0;
+
+        const questData = [
+            {
+                title: "Question 1",
+                question: "What is my middle name?",
+                answer: "harmony"
+            },
+            
     </script>
 </body>
 </html>
+
 
 
 
