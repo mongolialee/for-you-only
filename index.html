@@ -1,26 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>A Special Surprise</title>
+    <title>Top Secret Project</title>
     <style>
-        body { background-color: #ffe6e6; text-align: center; font-family: sans-serif; padding-top: 50px; }
-        .box { background: white; padding: 20px; border-radius: 15px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        button { background-color: #ff4d4d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; }
-        #message { display: none; margin-top: 20px; color: #ff4d4d; font-weight: bold; }
+        /* This makes the page look cute and centered */
+        body { 
+            background-color: #1a1a1a; 
+            color: white; 
+            text-align: center; 
+            font-family: 'Courier New', Courier, monospace; 
+            padding-top: 100px; 
+        }
+        .login-box { 
+            background: #333; 
+            padding: 30px; 
+            border-radius: 15px; 
+            display: inline-block; 
+            border: 2px solid #ff4d4d;
+        }
+        input { 
+            padding: 10px; 
+            border-radius: 5px; 
+            border: none; 
+            margin-bottom: 10px; 
+            width: 200px;
+        }
+        button { 
+            background-color: #ff4d4d; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        }
+        #game-content { display: none; } /* makes game invisible */
     </style>
 </head>
 <body>
 
-    <div class="box">
-        <h1>Hi [HIS NAME]! ❤️</h1>
-        <p>I coded this just for you. Click the button below:</p>
-        <button onclick="reveal()">Open My Heart</button>
-        <div id="message">I love you more than all this code! Happy Anniversary!</div>
+    <div id="login-screen">
+        <div class="login-box">
+            <h1>RESTRICTED ACCESS</h1>
+            <p>Enter The Super Secret Code:</p>
+            <p>Hint: A Day Special For You and Me 😉</p>
+            <input type="password" id="passwordInput" placeholder="Enter code here...">
+            <br>
+            <button onclick="checkPassword()">UNLOCK</button>
+            <p id="error-msg" style="color: red; display: none;">ACCESS DENIED</p>
+        </div>
+    </div>
+
+    <div id="game-content">
+        <h1>ACCESS GRANTED ❤️</h1>
+        <p>Welcome, Agent Jason. Your mission begins now...</p>
+        <div style="font-size: 50px;">🎮</div>
     </div>
 
     <script>
-        function reveal() {
-            document.getElementById('message').style.display = 'block';
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            
+            // password!!!
+            if (password === "11092023") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('game-content').style.display = 'block';
+                document.body.style.backgroundColor = "#ffe6e6"; // Change background to something cute
+                document.body.style.color = "#333";
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
         }
     </script>
 </body>
