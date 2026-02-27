@@ -65,7 +65,7 @@
                 user-select: none;
                 transition: transform 0.1s;
             }
-            .heart-btn:active {transform: scal(1.0);}
+            .heart-btn:active {transform: scale(1.0);}
         </style>
     </head>
     <body>
@@ -150,7 +150,7 @@
             }
 
             function checkPassword() { //TO GET INTO SERVER
-                if(document.getElementById('passwordInput').value === "11092023") {
+                if(document.mentById('passwordInput').value === "11092023") {
                     showScreen('game-content');
                     updateProgress(10);
                 }
@@ -172,11 +172,11 @@
 
             function checkQuest() {
                 let input = document.getElementById('questInput').value.toLowerCase().trim();
-                if (input === questData[currentLevel].a {
+                if (input === questData[currentLevel].a) {
                     currentLevel++;
-                    document.getElementById(questInput')value = "":
+                    document.getElementById(questInput')value = "";
                         if(currentLevel < questData.length) {
-                        document.getElementById('quest-question').innetText = questData[currentLevel].q;
+                        document.getElementById('quest-question').innerText = questData[currentLevel].q;
                         updateProgress(25 + (currentLevel * 10));
                     } else {
                         showScreen('madlibs-screen');
@@ -190,8 +190,8 @@
             function revealMadLib() {
                 let n1 = document.getElementById('noun1').value;
                 let n2 = document.getElementById('noun2').value;
-                let n3 = document.getelementById('noun3').value;
-                document.getElementById('final-story').innerText = 'Once upon a time, there was a girl who only wanted a ${n1}. One day her parents sent her out to go get ${n2} to make ${n2} pie. Along the way she got lost, but a ${n3} came along and saved her. Sweeping her off her feet and to neverland';
+                let n3 = document.getElementById('noun3').value;
+                document.getElementById('final-story').innerText = `Once upon a time, there was a girl who only wanted a ${n1}. One day her parents sent her out to go get ${n2} to make ${n2} pie. Along the way she got lost, but a ${n3} came along and saved her. Sweeping her off her feet and to neverland`;
                 document.getElementById('story-result').style.display = 'block';
                 updateProgress(80);
             }
@@ -212,6 +212,7 @@
         </script>
     </body>
 </html>
+
 
 
 
