@@ -19,6 +19,8 @@
                 border: 2px solid #ff4d4d;
                 width: 350px;
                 margin-top: 20px;
+                positioni: relative;
+                z-index: 10;
             }
             input { /*DESIGN BOX FOR INPUTING TEXT*/
                 pading: 10px;
@@ -63,6 +65,7 @@
                 cursor: pointer;
                 user-select: none;
                 transition: transform 0.1s;
+                display: inline-block;
             }
             .heart-btn:active {transform: scale(1.0);}
         </style>
@@ -149,9 +152,12 @@
             }
 
             function checkPassword() { //TO GET INTO SERVER
-                if(document.mentById('passwordInput').value === "11092023") {
+                const pass = document.getElementById('passwordInput').value;
+                if (pass === "11092023") {
                     showScreen('game-content');
                     updateProgress(10);
+                } else {
+                    alert("AHAHAHAH! YOU GOT IT WRONG!!!! 😂");
                 }
             }
             
@@ -174,6 +180,7 @@
                 if (input === questData[currentLevel].a) {
                     currentLevel++;
                     document.getElementById(questInput')value = "";
+                    document.getElementById('quest-error').style.display = 'none';
                         if(currentLevel < questData.length) {
                         document.getElementById('quest-question').innerText = questData[currentLevel].q;
                         updateProgress(25 + (currentLevel * 10));
@@ -211,6 +218,7 @@
         </script>
     </body>
 </html>
+
 
 
 
