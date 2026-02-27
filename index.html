@@ -3,16 +3,18 @@
     <head>
         <title>❤️ A Game Just For You! ❤️</title>
         <style>
+            /*BASIC STYLING*/
             body { 
                 background-color: #ffe6e6;
                 color: white;
                 text-align: center;
                 font-family: 'Courier New', Courier, monospace;
                 padding-top: 20px;
-                transition: all 0.5s;
+                transition: background-color 0.5s, color 0.5s;
             }
             .container-box { 
                 background: #333;
+                color: white;
                 padding: 30px;
                 border-radius: 15px;
                 display: inline-block;
@@ -20,7 +22,7 @@
                 width: 350px;
                 margin-top: 20px;
                 position: relative;
-                z-index: 10; /* This ensures the box is in front */
+                z-index: 10; 
             }
             input { 
                 padding: 10px;
@@ -28,6 +30,7 @@
                 border: none;
                 margin: 10px 0;
                 width: 85%;
+                color: #333;
             }
             button { 
                 background-color: #ff4d4d;
@@ -125,7 +128,7 @@
             <div class="container-box">
                 <h2>MISSION 3</h2>
                 <p>Show me some love!!!</p>
-                <div class="heart-btn" onclick="heartClicked()">❤️</div>
+                <div class="heart-btn" id="growingHeart" onclick="heartClicked()">❤️</div>
             </div>
         </div>
 
@@ -175,7 +178,7 @@
                 {q: "What is my middle name?", a: "harmony"},
                 {q: "How old was I when I got closed line by a volleyball net?", a: "7"},
                 {q: "Where is my dream vacation in Mexico?", a: "cancun"},
-                {q: "What do I do not like about some food but love about desserts?", a: "food"},
+                {q: "What do I do not like about some food but love about desserts?", a: "sweet"},
                 {q: "How old was I when I got my ears pierced?", a: "12"}
             ];
 
@@ -215,18 +218,19 @@
                 clicks++;
                 var heartElement = document.getElementById('growingHeart');
                 
-                var newSize = 80 + (clicks * 1);
+                var newSize = 80 + (clicks * 3);
                 heartElement.style.fontSize = newSize + "px";
 
                 if(clicks >= 20) {
                     showScreen('final-prize');
                     updateProgress(100);
-                    document.body.style.backgroundColor = #ff4d4d;
+                    document.body.style.backgroundColor = "#ff4d4d";
                     document.body.style.color = "white";
-                    document.getElementById('container-box).style.color = "#333";
+                    document.getElementById['container-box'].style.color = "#333";
                 }
             }
         </script>
     </body>
 </html>
+
 
