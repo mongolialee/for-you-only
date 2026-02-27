@@ -4,7 +4,7 @@
         <title>❤️ A Game Just For You! ❤️</title>
         <style>
             body { 
-                background-color: #1a1a1a;
+                background-color: #ffe6e6;
                 color: white;
                 text-align: center;
                 font-family: 'Courier New', Courier, monospace;
@@ -124,9 +124,8 @@
         <div id="clicker-screen">
             <div class="container-box">
                 <h2>MISSION 3</h2>
-                <p>Tap the heart 20 times!</p>
+                <p>Show me some love!!!</p>
                 <div class="heart-btn" onclick="heartClicked()">❤️</div>
-                <h3 id="click-count">Clicks: 0 / 20</h3>
             </div>
         </div>
 
@@ -141,10 +140,10 @@
         <script>
             // Utility to switch screens
             function showScreen(screenId) {
-                const screens = ['login-screen', 'game-content', 'quest-screen', 'madlibs-screen', 'clicker-screen', 'final-prize'];
-                screens.forEach(s => {
-                    document.getElementById(s).style.display = 'none';
-                });
+                var screens = ['login-screen', 'game-content', 'quest-screen', 'madlibs-screen', 'clicker-screen', 'final-prize'];
+                for (var i = 0; i < screens.length; i++) {
+                    document.getElementById(screens[i]).style.display = 'none';
+                }
                 document.getElementById(screenId).style.display = 'block';
             }
 
@@ -211,7 +210,6 @@
             let clicks = 0;
             function heartClicked() {
                 clicks++;
-                document.getElementById('click-count').innerText = "Clicks: " + clicks + " / 20";
                 if(clicks >= 20) {
                     showScreen('final-prize');
                     updateProgress(100);
