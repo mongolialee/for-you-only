@@ -138,12 +138,81 @@
         </div>
 
         <script>
+            function updateProgress(percent) { //MAKE THINGS WORK
+                document.getElementById('process-container').style.display = 'block';
+                document.getElementById('progress-bar').style.width = percent + "%";
+            }
+
+            function showScreen(screenId) { //SWITHCING SCREEN
+                const screen = ['login-screen', 'game-content', 'quest-screen', 'madlibs-screen', 'clicker-screen', 'final-prize'];
+                screen.forEach(s => document.getElementById(s).style.display = 'none');
+                document.getElementById.style.display = 'block';
+            }
+
+            function checkPassword() { //TO GET INTO SERVER
+                if(document.getElementById('passwordInput').value === "11092023") {
+                    showScreen('game-content');
+                    updateProgress(10);
+                }
+            }
             
+            function showQuest() { //GAME START!!!!!
+                showScreen('quest-screen');
+                updateProgress(25);
+            }
+            
+            let currentLevel = 0;
+            const questData = [ //QUESTIONS FOR GAME!!!!!
+                {q: "What is my middle name?", a: "harmony"},
+                {q: "How old was I when I got closed line by a volleyball net/string?", a: "7"},
+                {q: "Where is my dream vacation in Mexico?", a: "cancun"},
+                {q: "What is one thing I do not like about food but do with desserts?", a: "sweet"},
+                {q: "How old was I when I got my ears pierced?", a: "12"}
+            ];
+
+            function checkQuest() {
+                let input = document.getElementById('questInput').value.toLowerCase().trim();
+                if (input === questData[currentLevel].a {
+                    currentLevel++;
+                    document.getElementById(questInput')value = "":
+                        if(currentLevel < questData.length) {
+                        document.getElementById('quest-question').innetText = questData[currentLevel].q;
+                        updateProgress(25 + (currentLevel * 10));
+                    } else {
+                        showScreen('madlibs-screen');
+                        updateProgress(60);
+                    }
+                } else {
+                    document.getElementById('quest-error').style.display = 'block';
+                }
+            }
+
+            function revealMadLib() {
+                let n1 = document.getElementById('noun1').value;
+                let n2 = document.getElementById('noun2').value;
+                let n3 = document.getelementById('noun3').value;
+                document.getElementById('final-story').innerText = 'Once upon a time, there was a girl who only wanted a ${n1}. One day her parents sent her out to go get ${n2} to make ${n2} pie. Along the way she got lost, but a ${n3} came along and saved her. Sweeping her off her feet and to neverland';
+                document.getElementById('story-result').style.display = 'block';
+                updateProgress(80);
+            }
+            function showClicker() {
+                showScreen('clicker-screen');
+            }
+            
+            let clicks = 0; //CLICKY GAME
+            function heartClicked() {
+                clicks++;
+                if(clicks >= 20) {
+                    showScreen('final-prize');
+                    updateProgress(100);
+                    document.body.style.backgroundColor = "#ffe6e6";
+                    document.body.style.color = "#333";
+                }
+            }
         </script>
-                
-        
     </body>
 </html>
+
 
 
 
