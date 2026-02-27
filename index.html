@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>❤️ A Games Just For You! ❤️</title>
+        <title>❤️ A Game Just For You! ❤️</title>
         <style>
-            body { /*BASIC BACKGROUND COLORING FOR THE BODY*/ 
+            body { 
                 background-color: #1a1a1a;
                 color: white;
                 text-align: center;
@@ -11,7 +11,7 @@
                 padding-top: 20px;
                 transition: all 0.5s;
             }
-            .container-box { /*SETTING UP THE CONTAINER BOX FOR THE GAME TO TAKE PLACE IN*/
+            .container-box { 
                 background: #333;
                 padding: 30px;
                 border-radius: 15px;
@@ -19,18 +19,18 @@
                 border: 2px solid #ff4d4d;
                 width: 350px;
                 margin-top: 20px;
-                positioni: relative;
-                z-index: 10;
+                position: relative;
+                z-index: 10; /* This ensures the box is in front */
             }
-            input { /*DESIGN BOX FOR INPUTING TEXT*/
-                pading: 10px;
+            input { 
+                padding: 10px;
                 border-radius: 5px;
                 border: none;
                 margin: 10px 0;
                 width: 85%;
             }
-            button { /*BUTTON DESIGN*/
-                background-color: ff4d4d;
+            button { 
+                background-color: #ff4d4d;
                 color: white;
                 border: none;
                 padding: 12px 20px;
@@ -38,14 +38,14 @@
                 cursor: pointer;
                 font-weight: bold;
             }
-            /*PROGRESS BAR STYLING*/
+            /* Fixed the margin:auto typo here */
             #progress-container {
                 width: 300px;
                 height: 20px;
                 background-color: #444;
                 border-radius: 10px;
-                margin: 20px auto;
-                display: none; /*make bar hidden until logged in*/
+                margin: 20px auto; 
+                display: none; 
                 border: 1px solid #ff4d4d;
                 overflow: hidden;
             }
@@ -53,13 +53,12 @@
                 width: 0%;
                 height: 100%;
                 background-color: #ff4d4d;
-                transitioin: width 0.5s ease-in-out;
+                transition: width 0.5s ease-in-out;
             }
 
-            /*INVISIBILITY POTION*/
-            #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #clicker-screen, #final-prize, .error {display: none;}
+            /* Hiding sections correctly */
+            #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #final-prize, .error { display: none; }
 
-            /*HEART BUTTON DESIGN*/
             .heart-btn {
                 font-size: 80px;
                 cursor: pointer;
@@ -67,11 +66,11 @@
                 transition: transform 0.1s;
                 display: inline-block;
             }
-            .heart-btn:active {transform: scale(1.0);}
+            .heart-btn:active { transform: scale(1.2); }
         </style>
     </head>
     <body>
-        <div id="process-container">
+        <div id="progress-container">
             <div id="progress-bar"></div>
         </div>
         
@@ -79,7 +78,7 @@
             <div class="container-box">
                 <h1>❌ RESTRICTED ❌</h1>
                 <p>Enter The Super Secret Code</p>
-                <input type="password" id="passwordInput" placeholder="ENTER SUPER SECRET CODE HERE...">
+                <input type="password" id="passwordInput" placeholder="ENTER CODE...">
                 <p>Hint: Our special Day 😉</p>
                 <br>
                 <button onclick="checkPassword()">UNLOCK</button>
@@ -87,11 +86,11 @@
         </div>
 
         <div id="game-content">
-            <div class = "container-box">
+            <div class="container-box">
                 <h1>❤️ ACCESS GRANTED ❤️</h1>
                 <p>Welcome, Agent Jason.</p>
-                <p>Enter to start the best game evaaaaa!!!</p>
                 <div style="font-size:60px; cursor:pointer;" onclick="showQuest()">🎮</div>
+                <p>Click the console to start!</p>
             </div>
         </div>
 
@@ -99,10 +98,10 @@
             <div class="container-box">
                 <h2 id="level-title">MISSION 1</h2>
                 <p id="quest-question">What is my middle name?</p>
-                <input type="text" id="questInput" placeholder="ANSWER ME!!!">
+                <input type="text" id="questInput" placeholder="Answer here...">
                 <br>
-                <button onclick = "checkQuest()">SUBMIT</button>
-                <p id="quest-error" class="error" style="color:#ff6666;">AHAHAH, YOU GOT IT WRONG 😝</p>
+                <button onclick="checkQuest()">SUBMIT</button>
+                <p id="quest-error" class="error" style="color:#ff6666; display:none;">WRONG! Try again 😝</p>
             </div>
         </div>
 
@@ -110,12 +109,12 @@
             <div class="container-box">
                 <h2>MISSION 2</h2>
                 <p>Fill in the blanks!</p>
-                <input type="text" id="noun1" placeholder="Noun">
-                <input type="text" id="noun2" placeholder="Adjective">
-                <input type="text" id="noun3" placeholder="Verb">
+                <input type="text" id="noun1" placeholder="Something you want">
+                <input type="text" id="noun2" placeholder="An object">
+                <input type="text" id="noun3" placeholder="Someone special">
                 <br>
                 <button onclick="revealMadLib()">REVEAL STORY</button>
-                <div id="story-result" style="display"none; margin-top:20px;">
+                <div id="story-result" style="display:none; margin-top:20px;">
                     <p id="final-story"></p>
                     <button onclick="showClicker()">NEXT LEVEL</button>
                 </div>
@@ -123,55 +122,58 @@
         </div>
 
         <div id="clicker-screen">
-            <div clss="container-box">
+            <div class="container-box">
                 <h2>MISSION 3</h2>
-                <p>Show me some love!</p>
+                <p>Tap the heart 20 times!</p>
                 <div class="heart-btn" onclick="heartClicked()">❤️</div>
+                <h3 id="click-count">Clicks: 0 / 20</h3>
             </div>
         </div>
 
         <div id="final-prize">
             <div class="container-box">
                 <h1>MISSION COMPLETE!!!</h1>
-                <p>Good Job Bebe! You did it!!!!</p>
-                <p>I love you!!!!!</p>
+                <p>I love you Jason!!!!!</p>
                 <p><b>YOUR PRIZE:</b>.....is with MEEEEEEE!!!!!</p>
             </div>
         </div>
 
         <script>
-            function updateProgress(percent) { //MAKE THINGS WORK
-                document.getElementById('process-container').style.display = 'block';
+            // Utility to switch screens
+            function showScreen(screenId) {
+                const screens = ['login-screen', 'game-content', 'quest-screen', 'madlibs-screen', 'clicker-screen', 'final-prize'];
+                screens.forEach(s => {
+                    document.getElementById(s).style.display = 'none';
+                });
+                document.getElementById(screenId).style.display = 'block';
+            }
+
+            function updateProgress(percent) {
+                document.getElementById('progress-container').style.display = 'block';
                 document.getElementById('progress-bar').style.width = percent + "%";
             }
 
-            function showScreen(screenId) { //SWITHCING SCREEN
-                const screen = ['login-screen', 'game-content', 'quest-screen', 'madlibs-screen', 'clicker-screen', 'final-prize'];
-                screen.forEach(s => document.getElementById(s).style.display = 'none');
-                document.getElementById.style.display = 'block';
-            }
-
-            function checkPassword() { //TO GET INTO SERVER
+            function checkPassword() {
                 const pass = document.getElementById('passwordInput').value;
-                if (pass === "11092023") {
+                if(pass === "11092023") {
                     showScreen('game-content');
                     updateProgress(10);
                 } else {
-                    alert("AHAHAHAH! YOU GOT IT WRONG!!!! 😂");
+                    alert("Wrong password!");
                 }
             }
             
-            function showQuest() { //GAME START!!!!!
+            function showQuest() {
                 showScreen('quest-screen');
                 updateProgress(25);
             }
             
             let currentLevel = 0;
-            const questData = [ //QUESTIONS FOR GAME!!!!!
+            const questData = [
                 {q: "What is my middle name?", a: "harmony"},
-                {q: "How old was I when I got closed line by a volleyball net/string?", a: "7"},
+                {q: "How old was I when I got closed line by a volleyball net?", a: "7"},
                 {q: "Where is my dream vacation in Mexico?", a: "cancun"},
-                {q: "What is one thing I do not like about food but do with desserts?", a: "sweet"},
+                {q: "What do I only like sweet when it comes to dessert?", a: "food"},
                 {q: "How old was I when I got my ears pierced?", a: "12"}
             ];
 
@@ -179,9 +181,9 @@
                 let input = document.getElementById('questInput').value.toLowerCase().trim();
                 if (input === questData[currentLevel].a) {
                     currentLevel++;
-                    document.getElementById(questInput')value = "";
+                    document.getElementById('questInput').value = "";
                     document.getElementById('quest-error').style.display = 'none';
-                        if(currentLevel < questData.length) {
+                    if(currentLevel < questData.length) {
                         document.getElementById('quest-question').innerText = questData[currentLevel].q;
                         updateProgress(25 + (currentLevel * 10));
                     } else {
@@ -197,17 +199,19 @@
                 let n1 = document.getElementById('noun1').value;
                 let n2 = document.getElementById('noun2').value;
                 let n3 = document.getElementById('noun3').value;
-                document.getElementById('final-story').innerText = `Once upon a time, there was a girl who only wanted a ${n1}. One day her parents sent her out to go get ${n2} to make ${n2} pie. Along the way she got lost, but a ${n3} came along and saved her. Sweeping her off her feet and to neverland`;
+                document.getElementById('final-story').innerText = `Once upon a time, there was a girl who only wanted a ${n1}. She found a ${n2}, but then ${n3} came along and swept her off her feet!`;
                 document.getElementById('story-result').style.display = 'block';
                 updateProgress(80);
             }
+
             function showClicker() {
                 showScreen('clicker-screen');
             }
             
-            let clicks = 0; //CLICKY GAME
+            let clicks = 0;
             function heartClicked() {
                 clicks++;
+                document.getElementById('click-count').innerText = "Clicks: " + clicks + " / 20";
                 if(clicks >= 20) {
                     showScreen('final-prize');
                     updateProgress(100);
@@ -218,15 +222,3 @@
         </script>
     </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
