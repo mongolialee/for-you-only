@@ -41,7 +41,7 @@
                 cursor: pointer;
                 font-weight: bold;
             }
-            #progress-container {/* PROGRESS BAR STYLING*/
+            #progress-container {
                 width: 300px;
                 height: 20px;
                 background-color: #444;
@@ -58,14 +58,14 @@
                 transition: width 0.5s ease-in-out;
             }
 
-            /* INVISIBILIY POTION*/
+            /* INVISIBILITY POTION */
             #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #final-prize, .error { display: none; }
 
-            .heart-btn { /*HEART BUTTON DESIGN*/
+            .heart-btn {
                 font-size: 80px;
                 cursor: pointer;
                 user-select: none;
-                transition: font-size 0.2s, transform 0.1s;;
+                transition: font-size 0.2s, transform 0.1s;
                 display: inline-block;
                 margin-top: 20px;
             }
@@ -128,7 +128,7 @@
             <div class="container-box">
                 <h2>MISSION 3</h2>
                 <p>Show me some love!!!</p>
-                <div class="heart-btn" id="growingHeart" onclick="heartClicked()">❤️</div>
+                <div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div>
             </div>
         </div>
 
@@ -142,8 +142,7 @@
         </div>
 
         <script>
-            
-            function showScreen(screenId) { //MAKE GAMES WORK
+            function showScreen(screenId) {
                 var screens = ['login-screen', 'game-content', 'quest-screen', 'madlibs-screen', 'clicker-screen', 'final-prize'];
                 for (var i = 0; i < screens.length; i++) {
                     document.getElementById(screens[i]).style.display = 'none';
@@ -151,15 +150,13 @@
                 document.getElementById(screenId).style.display = 'block';
             }
 
-            function updateProgress(percent) { // MAKE BAR GOOOOOOOOO >
+            function updateProgress(percent) {
                 document.getElementById('progress-container').style.display = 'block';
                 document.getElementById('progress-bar').style.width = percent + "%";
             }
 
-            //-----MISSION CONTROL CENTER-----
-
-            function checkPassword() { //LOGIN
-                const pass = document.getElementById('passwordInput').value;
+            function checkPassword() {
+                var pass = document.getElementById('passwordInput').value;
                 if(pass === "11092023") {
                     showScreen('game-content');
                     updateProgress(10);
@@ -173,8 +170,8 @@
                 updateProgress(25);
             }
             
-            let currentLevel = 0; //QUESTS
-            const questData = [
+            var currentLevel = 0;
+            var questData = [
                 {q: "What is my middle name?", a: "harmony"},
                 {q: "How old was I when I got closed line by a volleyball net?", a: "7"},
                 {q: "Where is my dream vacation in Mexico?", a: "cancun"},
@@ -182,8 +179,8 @@
                 {q: "How old was I when I got my ears pierced?", a: "12"}
             ];
 
-            function checkQuest() { //MAKE QUEST WORK
-                let input = document.getElementById('questInput').value.toLowerCase().trim();
+            function checkQuest() {
+                var input = document.getElementById('questInput').value.toLowerCase().trim();
                 if (input === questData[currentLevel].a) {
                     currentLevel++;
                     document.getElementById('questInput').value = "";
@@ -200,11 +197,11 @@
                 }
             }
 
-            function revealMadLib() { //MADLIBS
-                let n1 = document.getElementById('noun1').value;
-                let n2 = document.getElementById('noun2').value;
-                let n3 = document.getElementById('noun3').value;
-                document.getElementById('final-story').innerText = `Once upon a time, there was a girl who only wanted a ${n1}. She found a ${n2}, but then ${n3} came along and swept her off her feet!`;
+            function revealMadLib() {
+                var n1 = document.getElementById('noun1').value;
+                var n2 = document.getElementById('noun2').value;
+                var n3 = document.getElementById('noun3').value;
+                document.getElementById('final-story').innerText = "Once upon a time, there was a girl who only wanted a " + n1 + ". She found a " + n2 + ", but then " + n3 + " came along and swept her off her feet!";
                 document.getElementById('story-result').style.display = 'block';
                 updateProgress(80);
             }
@@ -218,6 +215,7 @@
                 clicks++;
                 var heartElement = document.getElementById('growingHeart');
                 
+                // Grows by 5 pixels every click
                 var newSize = 80 + (clicks * 3);
                 heartElement.style.fontSize = newSize + "px";
 
@@ -226,11 +224,8 @@
                     updateProgress(100);
                     document.body.style.backgroundColor = "#ff4d4d";
                     document.body.style.color = "white";
-                    document.getElementById['container-box'].style.color = "#333";
                 }
             }
         </script>
     </body>
 </html>
-
-
