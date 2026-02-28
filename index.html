@@ -10,7 +10,8 @@
                 text-align: center;
                 font-family: 'Courier New', Courier, monospace;
                 padding-top: 20px;
-                transition: background-color 0.5s, color 0.5s;
+                transition: background-color 0.5s;
+                overflow-x: hidden;
             }
             .container-box { 
                 background: #da1e76;
@@ -62,15 +63,31 @@
             /* INVISIBILITY POTION */
             #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #final-prize, .error { display: none; }
 
+            /* HEART DESIGNS*/
+            #heart-area {
+                height: 200px;
+                position: relative;
+                martin-top: 20px;
+            }
             .heart-btn {
-                font-size: 80px;
+                font-size: 100px;
                 cursor: pointer;
                 user-select: none;
-                transition: font-size 0.2s, transform 0.1s;
-                display: inline-block;
-                margin-top: 20px;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                transition: font-size 0.2s ease-out;
+                z-index: 100;
             }
-            .heart-btn:active { transform: scale(1.2); }
+            /* EXPLOSION ANIMATION */
+            @keyframes explode {
+                0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+                100% { transform: translate(-50%, -50%) scale(20); opacity: 0; }
+            }
+            .exploding {
+                animation: explode 0.6s forwards ease-in;
+            }
         </style>
     </head>
     <body>
@@ -129,7 +146,9 @@
             <div class="container-box">
                 <h2>MISSION 3</h2>
                 <p>Show me some love!!!</p>
-                <div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div>
+                <div id="heaert-area">
+                    <div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div>
+                </div>
             </div>
         </div>
 
@@ -162,7 +181,7 @@
                     showScreen('game-content');
                     updateProgress(10);
                 } else {
-                    alert("Wrong password!");
+                    alert("HOW DARE YOU NOT KNOW THIS! 😤");
                 }
             }
             
@@ -213,21 +232,27 @@
             
             var clicks = 0;
             function heartClicked() {
+                if (clicks >= 20) return;
+                
                 clicks++;
                 var heartElement = document.getElementById('growingHeart');
                 
-                // Grows by 10 pixels every click as requested
-                var newSize = 80 + (clicks * 10);
+                // GROWS 40PX EACH CLICK
+                var newSize = 80 + (clicks * 40);
                 heartElement.style.fontSize = newSize + "px";
 
                 if(clicks >= 20) {
-                    showScreen('final-prize');
-                    updateProgress(100);
-                    document.body.style.backgroundColor = "#ffe6e6";
-                    document.body.style.color = "white";
+                    heart.classList.add('exploding');
+                    
+                    setTimeout(() => {
+                        showScreen('final-prize');
+                        updateProgress(100);
+                        document.body.style.backgroundColor = "#ffe6e6";
+                    }, 600);
                 }
             }
         </script>
     </body>
 </html>
+
 
