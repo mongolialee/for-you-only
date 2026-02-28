@@ -40,6 +40,7 @@
                 border-radius: 5px;
                 cursor: pointer;
                 font-weight: bold;
+                border: 1px solid white;
             }
             #progress-container {
                 width: 300px;
@@ -215,13 +216,14 @@
                 clicks++;
                 var heartElement = document.getElementById('growingHeart');
                 
+                // Grows by 10 pixels every click as requested
                 var newSize = 80 + (clicks * 10);
                 heartElement.style.fontSize = newSize + "px";
 
                 if(clicks >= 20) {
                     showScreen('final-prize');
                     updateProgress(100);
-                    document.body.style.backgroundColor = "#ff4d4d";
+                    document.body.style.backgroundColor = "#da1e76";
                     document.body.style.color = "white";
                 }
             }
