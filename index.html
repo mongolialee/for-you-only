@@ -111,7 +111,7 @@
             <div class="container-box">
                 <h1>❤️ ACCESS GRANTED ❤️</h1>
                 <p>Welcome, Agent Jason.</p>
-                <div style="font-size:200px; cursor:pointer;" onclick="showQuest()">🎮</div>
+                <div style="font-size:150px; cursor:pointer;" onclick="showQuest()">🎮</div>
                 <p>Enter to start the best game evaaaaa!!!</p>
             </div>
         </div>
@@ -180,7 +180,7 @@
                 var pass = document.getElementById('passwordInput').value;
                 if(pass === "11092023") {
                     showScreen('game-content');
-                    updateProgress(10);
+                    updateProgress(0);
                 } else {
                     alert("HOW DARE YOU NOT KNOW THIS! 😤");
                 }
@@ -208,10 +208,10 @@
                     document.getElementById('quest-error').style.display = 'none';
                     if(currentLevel < questData.length) {
                         document.getElementById('quest-question').innerText = questData[currentLevel].q;
-                        updateProgress(25 + (currentLevel * 10));
+                        updateProgress(25 + (currentLevel * 5));
                     } else {
                         showScreen('madlibs-screen');
-                        updateProgress(60);
+                        updateProgress(50);
                     }
                 } else {
                     document.getElementById('quest-error').style.display = 'block';
@@ -224,7 +224,7 @@
                 var n3 = document.getElementById('noun3').value;
                 document.getElementById('final-story').innerText = "Once upon a time, there was a girl who only wanted a " + n1 + ". She found a " + n2 + ", but then " + n3 + " came along and swept her off her feet!";
                 document.getElementById('story-result').style.display = 'block';
-                updateProgress(80);
+                updateProgress(75);
             }
 
             function showClicker() {
@@ -255,6 +255,7 @@
         </script>
     </body>
 </html>
+
 
 
 
