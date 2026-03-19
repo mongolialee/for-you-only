@@ -9,32 +9,32 @@
                 color: white;
                 text-align: center;
                 font-family: 'Courier New', Courier, monospace;
-                padding-top: 20px;
+                margin: 0;
+                padding: 20px;
                 transition: background-color 0.5s;
                 overflow-x: hidden;
+                user-select: none;
             }
             .container-box { 
                 background: #da1e76;
-                color: white;
                 padding: 30px;
                 border-radius: 15px;
                 display: inline-block;
                 border: 2px solid #ff4d4d;
                 width: 350px;
                 margin-top: 20px;
-                position: relative;
-                z-index: 10; 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             }
 
             /* ROTARY DIAL STYLES */
             .rotary-container {
                 position: relative;
-                width: 250px;
-                height: 250px;
+                width: 260px;
+                height: 260px;
                 margin: 20px auto;
                 background: #333;
                 border-radius: 50%;
-                border: 8px solid #222;
+                border: 10px solid #222;
                 box-shadow: 0 10px 20px rgba(0,0,0,0.3);
                 touch-action: none;
             }
@@ -43,25 +43,25 @@
                 position: absolute;
                 width: 100%;
                 height: 100%;
+                top: 0;
+                left: 0;
                 border-radius: 50%;
-                transition: transform 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95);
                 z-index: 2;
-                transform: rotate(0deg);
             }
 
             .dial-hole {
                 position: absolute;
-                width: 40px;
-                height: 40px;
+                width: 42px;
+                height: 42px;
                 background: #ffe6e6;
                 border-radius: 50%;
                 color: #da1e76;
                 font-weight: bold;
-                line-height: 40px;
+                line-height: 42px;
                 cursor: grab;
-                transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%); /* Centers the hole on the coordinate */
                 border: 2px solid #da1e76;
-                pointer-events: auto;
+                font-size: 18px;
             }
 
             .dial-hole:action { cursor: grabbing; }
@@ -69,11 +69,11 @@
             /* METAL PIECE ON REAL PHONE */
             .finger-stop {
                 position: absolute;
-                width: 10px;
-                height: 50px;
-                background: linear-gradient(to bottom, #999, #666);
-                bottom: 20px;
-                right: 50px;
+                width: 12px;
+                height: 55px;
+                background: linear-gradient(to bottom, #bbb, #777);
+                bottom: 30px;
+                right: 40px;
                 z-index: 5;
                 border-radius: 5px;
                 transform: rotate(-35deg);
@@ -81,15 +81,17 @@
             }
 
             #dial-display {
-                font-size: 24px;
+                font-size: 26px;
                 letter-spacing: 5px;
                 margin-top: 10px;
-                height: 30px;
+                height: 35px;
                 color: #ffeadb;
                 background: rgba(0,0,0,0.2);
                 border-radius: 5px;
+                line-height: 35px;
             }
-                
+            
+            /*INPUTS AND BUTTONS */    
             input { 
                 padding: 10px;
                 border-radius: 5px;
@@ -108,6 +110,8 @@
                 font-weight: bold;
                 border: 1px solid white;
             }
+
+            /* PROGRESS BAR */
             #progress-container {
                 width: 300px;
                 height: 20px;
@@ -166,7 +170,7 @@
                 <h1>❌ RESTRICTED ❌</h1>
                 <p>Dial The Super Secret Code</p>
                 <div id="dial-display">________</div>
-                <div class="rotary-container">
+                <div class="rotary-container" id="phone-base">
                         <div class="finger-stop"></div>
                         <div id="dial-wheel"></div>
                 </div>
