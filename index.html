@@ -48,16 +48,16 @@
             }
 
             .dial-hole {
-                position: absoulte;
+                position: absolute;
                 width: 40px;
                 height: 40px;
                 background: #ffe6e6;
                 border-radius: 50%;
                 color: #da1e76;
                 font-weight: bold;
-                line-weight: 40px;
-                cursor: ponter;
-                transform: tranlate(-505, -50%);
+                line-height: 40px;
+                cursor: pointer;
+                transform: translate(-50%, -50%);
                 border: 2px solid #da1e76;
                 transitioin: backgroun 0.2s;
             }
@@ -238,7 +238,7 @@
             numbers.forEach((num, i) => {
                 const hole = document.createElement('div');
                 hole.className = 'dial-hole';
-                hole-innerText = num;
+                hole.innerText = num;
 
                 //HOLES!!!!
                 const angle = (i * 30) - 60;
