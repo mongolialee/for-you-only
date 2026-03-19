@@ -25,6 +25,66 @@
                 position: relative;
                 z-index: 10; 
             }
+
+            /* ROTARY DIAL STYLES */
+            .rotary-container {
+                position: relative;
+                width: 250px;
+                height: 250px;
+                margin: 20px auto;
+                background: #333;
+                border-radius: 50%;
+                border: 8px solid #222;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            }
+
+            #dial-wheel {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                transition: transform 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+                z-index: 2;
+            }
+
+            .dial-hole {
+                position: absoulte;
+                width: 40px;
+                height: 40px;
+                background: #ffe6e6;
+                border-radius: 50%;
+                color: #da1e76;
+                font-weight: bold;
+                line-weight: 40px;
+                cursor: ponter;
+                transform: tranlate(-505, -50%);
+                border: 2px solid #da1e76;
+                transitioin: backgroun 0.2s;
+            }
+
+            .dial-hole:hover {background: #ff4d4d; color: white;}
+
+            /* METAL PIECE ON REAL PHONE */
+            .finger-stop {
+                position: absolute;
+                width: 10px;
+                height: 50px;
+                background: #888;
+                bottom: 20px;
+                right: 50px;
+                z-index: 5;
+                border-radius: 5px;
+                transform: rotate(-30deg);
+            }
+
+            #dial-display {
+                font-size: 24px;
+                letter-spacing: 5px;
+                margin-top: 10px;
+                height: 30px;
+                color: #ffeadb;
+            }
+                
             input { 
                 padding: 10px;
                 border-radius: 5px;
@@ -99,11 +159,15 @@
         <div id="login-screen">
             <div class="container-box">
                 <h1>❌ RESTRICTED ❌</h1>
-                <p>Enter The Super Secret Code</p>
-                <input type="password" id="passwordInput" placeholder="SUPER SECRET CODE...">
-                <p>Hint: Our special Day 😉</p>
+                <p>Dial The Super Secret Code</p>
+                <div id="dial-display">________</div>
+                <div class="rotary-container">
+                        <div class="finger-stop></div>
+                        <div id="dial-wheel"></div>
+                </div>
+                <p>Hint: Your Credit Card Info 🥴</p>
                 <br>
-                <button onclick="checkPassword()">UNLOCK</button>
+                <button onclick="resetDial()">RESET</button>
             </div>
         </div>
 
