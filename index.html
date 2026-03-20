@@ -282,19 +282,33 @@
             const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
             const holeAngles = [];
 
-            numbers.forEach((num, i) => {
+            numbers.forEach((num) => {
+                const customAngles = {
+                    1: 130, 2: 160, 3: 190, 4: 220, 5: 250, 
+                    6: 280, 7: 310, 8: 340, 9: 10, 0: 40
+                };
+
+                const degree = customAngles[num];
+                holeAngles[num] = degree;
+
+                // Convert degrees to Radians for the Math functions!
+                const radian = degree * (Math.PI / 180); 
+
                 const hole = document.createElement('div');
                 hole.className = 'dial-hole';
                 hole.innerText = num;
-                const angle = (i * 28) - 90; 
-                holeAngles[num] = angle;
+
                 const radius = 98;
-                const x = 130 + radius * Math.cos(angle * Math.PI / 180);
-                const y = 130 + radius * Math.sin(angle * Math.PI / 180);
+                // Now the X and Y will actually calculate a circle
+                const x = 130 + radius * Math.cos(radian);
+                const y = 130 + radius * Math.sin(radian);
+
                 hole.style.left = x + 'px';
                 hole.style.top = y + 'px';
+
                 hole.onmousedown = (e) => startDial(e, num);
                 hole.ontouchstart = (e) => startDial(e.touches[0], num);
+
                 dialWheel.appendChild(hole);
             });
 
@@ -483,50 +497,64 @@
                     {x: 1, y: 0},
                     {x: -1, y: 0}
                 ];
+                if (Math.random() < 0.25) return;
 
-            let queue = [];
-            let visited = new Set();
-            let parent = {};
+                let validMoves = directions.filter(dir => {
+                    let nx = ghostPos.x + dir.x;
+                    let ny = ghostPos.y + dir.y;
+                    return initialMaze[ny][nx] !== 1;
+                });
 
-            queue.push(ghostPos);
-            visited.add(`${ghostPos.x},${ghostPos.y}`);
+                if (Math.random() < 0.3) {
+                    let move = validMoves[Math.floor(Math.random() * validMoves.length)];
+                    ghostPos.x += move.x;
+                    ghostPos.y += move.y;
+                    return;
+                }
 
-            let found = false;
+                let queue = [];
+                let visited = new Set();
+                let parent = {};
 
-        while (queue.length > 0) {
-            let current = queue.shift();
-            if (current.x === pacPos.x && current.y === pacPos.y) {
-                found = true;
-                break;
-            }
+                queue.push(ghostPos);
+                visited.add(`${ghostPos.x},${ghostPos.y}`);
 
-            for (let dir of directions) {
-                let nx = current.x + dir.x;
-                let ny = current.y + dir.y;
+                let found = false;
 
-                if (
-                    initialMaze[ny][nx] !== 1 &&
-                    !visited.has(`${nx},${ny}`)
-                ) {
-                    queue.push({x: nx, y: ny});
-                    visited.add(`${nx},${ny}`);
-                    parent[`${nx},${ny}`] = current;
+            while (queue.length > 0) {
+                let current = queue.shift();
+                if (current.x === pacPos.x && current.y === pacPos.y) {
+                    found = true;
+                    break;
+                }
+
+                for (let dir of directions) {
+                    let nx = current.x + dir.x;
+                    let ny = current.y + dir.y;
+
+                    if (
+                        initialMaze[ny][nx] !== 1 &&
+                        !visited.has(`${nx},${ny}`)
+                    ) {
+                        queue.push({x: nx, y: ny});
+                        visited.add(`${nx},${ny}`);
+                        parent[`${nx},${ny}`] = current;
+                    }
                 }
             }
+
+            if (!found) return;
+
+            // Backtrack from player to ghost
+            let step = pacPos;
+            while (parent[`${step.x},${step.y}`] &&
+                   !(parent[`${step.x},${step.y}`].x === ghostPos.x &&
+                     parent[`${step.x},${step.y}`].y === ghostPos.y)) {
+                step = parent[`${step.x},${step.y}`];
+            }
+
+            ghostPos = step;
         }
-
-        if (!found) return;
-
-        // Backtrack from player to ghost
-        let step = pacPos;
-        while (parent[`${step.x},${step.y}`] &&
-               !(parent[`${step.x},${step.y}`].x === ghostPos.x &&
-                 parent[`${step.x},${step.y}`].y === ghostPos.y)) {
-            step = parent[`${step.x},${step.y}`];
-        }
-
-        ghostPos = step;
-    }
 
             function checkCollision() {
                 if (pacPos.x === ghostPos.x && pacPos.y === ghostPos.y) {
