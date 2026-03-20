@@ -59,14 +59,11 @@
                 font-weight: bold;
                 line-height: 42px;
                 cursor: grab;
-                transform: translate(-50%, -50%); /* Centers the hole on the coordinate */
+                transform: translate(-50%, -50%);
                 border: 2px solid #da1e76;
                 font-size: 18px;
             }
 
-            .dial-hole:action { cursor: grabbing; }
-
-            /* METAL PIECE ON REAL PHONE */
             .finger-stop {
                 position: absolute;
                 width: 12px;
@@ -91,7 +88,6 @@
                 line-height: 35px;
             }
             
-            /*INPUTS AND BUTTONS */    
             input { 
                 padding: 10px;
                 border-radius: 5px;
@@ -129,65 +125,43 @@
                 transition: width 0.5s ease-in-out;
             }
 
-            /* INVISIBILITY POTION */
-            #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #final-prize, .error { display: none; }
+            #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #pacman-screen, #final-prize, .error { display: none; }
 
+            /* BIGGER MAZE STYLES */
             #pacman-grid {
                 display: grid;
-                grid-template-columns: repeat(10, 30px);
-                grid-template-rows: repeat(10, 30px);
+                grid-template-columns: repeat(15, 22px);
+                grid-template-rows: repeat(15, 22px);
                 gap: 1px;
-                background: #222;
+                background: #333;
                 padding: 5px;
-                border: 4px solid #ff4d4d;
+                border: 4px solid #ffb3b3;
                 margin: 20px auto;
-                width: 310px;
+                width: 345px;
             }
+            .cell { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+            .wall { background-color: #ff80ab; border-radius: 2px; }
+            .dot { color: #ff4d4d; font-size: 10px; }
+            .pacman { font-size: 18px; }
+            .ghost { font-size: 18px; }
 
-            .cell {
-                width: 30px;
-                height: 30px;
-                display: flex;
-                align-items: centers;
-                justify-content: center;
-            }
-            .wall {
-                background-color: #555;
-                border-radius: 2px;
-            }
-
-            .dot { 
-                width: 6px;
-                height: 6px; 
-                background: white;
-                border-radius: 50%;
-            }
-
-            .pacman {
-                font-size: 24px;
-                transform: scale(-1);
-            }
-
-            controls {
+            .controls {
                 margin-top: 10px;
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
                 gap: 5px;
                 width: 150px;
-                margin-left: auto;
-                margin-right: auto;
+                margin: 10px auto;
             }
             
-            /* HEART DESIGNS*/
             #heart-area {
                 height: 200px;
                 position: relative;
-                martin-top: 20px;
+                margin-top: 20px;
             }
             .heart-btn {
                 font-size: 100px;
                 cursor: pointer;
-                user-select: none;
                 position: absolute;
                 left: 50%;
                 top: 50%;
@@ -195,15 +169,11 @@
                 transition: font-size 0.2s ease-out;
                 z-index: 999;
             }
-            /* EXPLOSION ANIMATION */
             @keyframes explode {
                 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
                 100% { transform: translate(-50%, -50%) scale(20); opacity: 0; }
             }
-            .exploding {
-                animation: explode 0.6s forwards ease-in;
-                pointer-events: none;
-            }
+            .exploding { animation: explode 0.6s forwards ease-in; pointer-events: none; }
         </style>
     </head>
     <body>
@@ -220,7 +190,7 @@
                         <div class="finger-stop"></div>
                         <div id="dial-wheel"></div>
                 </div>
-                <p>Hint: Your Credit Card Info 🥴</p>
+                <p>Hint: 11-09-2023 🥴</p>
                 <br>
                 <button onclick="resetDial()">RESET</button>
             </div>
@@ -246,39 +216,39 @@
             </div>
         </div>
 
-        <div id="pacman-screen">
-            <div class="container-box">
-                <h2>FINAL MISSION</h2>
-                <p>Eat all the dots, Jason!</p>
-                <div id="pacman-grid"></div>
-                <div class="controls">
-                    <button style="grid-column: 2;" onclick="movePacman(0, -1)">UP</button>
-                    <button style="grid-column: 1;" onclick="movePacman(-1, 0)">L</button>
-                    <button style="grid-column: 2;" onclick="movePacman(0, 1)">DWN</button>
-                    <button style="grid-column: 3;" onclick="movePacman(1, 0)">R</button>
-                </div>
-            </div>
-        </div>
-
         <div id="madlibs-screen">
             <div class="container-box">
                 <h2>MISSION 2</h2>
                 <p>Fill in the blanks!</p>
                 <input type="text" id="noun1" placeholder="Something you want">
-                <input type="text" id="noun2" placeholder="An object">
+                <input type="text" id="noun2" placeholder="An action">
                 <input type="text" id="noun3" placeholder="Someone special">
                 <br>
                 <button onclick="revealMadLib()">REVEAL STORY</button>
                 <div id="story-result" style="display:none; margin-top:20px;">
                     <p id="final-story"></p>
-                    <button onclick="showClicker()">NEXT LEVEL</button>
+                    <button onclick="showPacman()">NEXT MISSION</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="pacman-screen">
+            <div class="container-box">
+                <h2>MISSION 3</h2>
+                <p>Don't let the Ghost catch you!</p>
+                <div id="pacman-grid"></div>
+                <div class="controls">
+                    <button style="grid-column: 2;" onclick="movePlayer(0, -1)">UP</button>
+                    <button style="grid-column: 1;" onclick="movePlayer(-1, 0)">L</button>
+                    <button style="grid-column: 2;" onclick="movePlayer(0, 1)">DWN</button>
+                    <button style="grid-column: 3;" onclick="movePlayer(1, 0)">R</button>
                 </div>
             </div>
         </div>
 
         <div id="clicker-screen">
             <div class="container-box">
-                <h2>MISSION 3</h2>
+                <h2>FINAL MISSION</h2>
                 <p>Show me some love!!!</p>
                 <div id="heart-area">
                     <div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div>
@@ -296,52 +266,43 @@
         </div>
 
         <script>
-            //ROTARY DIAL
+            // --- ROTARY DIAL LOGIC ---
             const dialWheel = document.getElementById('dial-wheel');
             const display = document.getElementById('dial-display');
             const phoneBase = document.getElementById('phone-base');
             const correctCode = "11092023";
             let dialedCode = "";
-            
             let isDragging = false;
             let startAngle = 0;
             let currentRotation = 0;
             let activeNumber = null;
-            const STOP_ANGLE = 145;
+            const STOP_ANGLE = 145; 
 
             const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-            const holeAngles = []; // Store original angles for each number
+            const holeAngles = [];
 
             numbers.forEach((num, i) => {
                 const hole = document.createElement('div');
                 hole.className = 'dial-hole';
                 hole.innerText = num;
-
-                // Position holes (Standard rotary layout)
                 const angle = (i * 28) - 50; 
                 holeAngles[num] = angle;
-                
                 const radius = 98;
                 const x = 130 + radius * Math.cos(angle * Math.PI / 180);
                 const y = 130 + radius * Math.sin(angle * Math.PI / 180);
-
                 hole.style.left = x + 'px';
                 hole.style.top = y + 'px';
-
-                hole.onmousedown = (e) => startDial(e, num, angle);
+                hole.onmousedown = (e) => startDial(e, num);
                 hole.ontouchstart = (e) => startDial(e.touches[0], num);
-                
                 dialWheel.appendChild(hole);
             });
 
             function getAngle(x, y) {
                 const rect = phoneBase.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                return Math.atan2(y - centerY, x - centerX) * 180 / Math.PI;
+                return Math.atan2(y - (rect.top + rect.height/2), x - (rect.left + rect.width/2)) * 180 / Math.PI;
             }
 
-            function startDial(e, num, angle) {
+            function startDial(e, num) {
                 isDragging = true;
                 activeNumber = num;
                 startAngle = getAngle(e.clientX, e.clientY);
@@ -350,14 +311,11 @@
 
             window.onmousemove = (e) => {
                 if (!isDragging) return;
-                
                 const currentAngle = getAngle(e.clientX, e.clientY);
                 let diff = currentAngle - startAngle;
-                
-                // Only allow clockwise rotation
-                if (diff < 0) diff += 360; 
-                if (diff > 310) return; // Prevent full 360 spin
-
+                if (diff < 0) diff += 360;
+                const maxRotation = STOP_ANGLE - holeAngles[activeNumber];
+                if (diff > maxRotation) diff = maxRotation;
                 currentRotation = diff;
                 dialWheel.style.transform = `rotate(${currentRotation}deg)`;
             };
@@ -365,44 +323,33 @@
             window.onmouseup = () => {
                 if (!isDragging) return;
                 isDragging = false;
-
-                const finalPos = holeAngles[activeNumber] + currentRotation;
-                
-                if (finalPos >= STOP_ANGLE - 25) {
+                const maxRotation = STOP_ANGLE - holeAngles[activeNumber];
+                if (currentRotation >= maxRotation - 10) {
                     dialedCode += activeNumber;
                     display.innerText = dialedCode.padEnd(8, "_");
                     if (dialedCode.length === 8) checkCode();
                 }
-
-                // Spring back animation
-                dialWheel.style.transition = "transform 0.7s cubic-bezier(0.45, 0.05, 0.55, 0.95)";
+                dialWheel.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
                 dialWheel.style.transform = `rotate(0deg)`;
                 currentRotation = 0;
             };
 
-            // Touch support for mobile
             window.ontouchmove = (e) => window.onmousemove(e.touches[0]);
             window.ontouchend = () => window.onmouseup();
 
             function checkCode() {
-            if (dialedCode === correctCode) {
-                setTimeout(() => showScreen('game-content'), 500);
-            } else {
-                setTimeout(() => { alert("HOW DARE YOU NO KNOW THIS 👿!"); resetDial(); }, 500);
-            }
-        }
-
-            function resetDial() {
-                dialedCode = "";
-                display.innerText = "________";
-            }
-
-            // GAME ON //
-            function showScreen(screenId) {
-                var screens = ['login-screen', 'game-content', 'quest-screen', 'madlibs-screen', 'clicker-screen', 'final-prize'];
-                for (var i = 0; i < screens.length; i++) {
-                    document.getElementById(screens[i]).style.display = 'none';
+                if (dialedCode === correctCode) {
+                    setTimeout(() => showScreen('game-content'), 500);
+                } else {
+                    setTimeout(() => { alert("Wrong code!"); resetDial(); }, 500);
                 }
+            }
+            function resetDial() { dialedCode = ""; display.innerText = "________"; }
+
+            // --- NAVIGATION ---
+            function showScreen(screenId) {
+                var screens = ['login-screen', 'game-content', 'quest-screen', 'madlibs-screen', 'pacman-screen', 'clicker-screen', 'final-prize'];
+                screens.forEach(s => document.getElementById(s).style.display = 'none');
                 document.getElementById(screenId).style.display = 'block';
             }
 
@@ -411,11 +358,8 @@
                 document.getElementById('progress-bar').style.width = percent + "%";
             }
             
-            function showQuest() { 
-                showScreen('quest-screen');
-                updateProgress(25);
-            }
-            
+            function showQuest() { showScreen('quest-screen'); updateProgress(15); }
+
             var currentLevel = 0;
             var questData = [
                 {q: "What is my middle name?", a: "harmony"},
@@ -433,71 +377,15 @@
                     document.getElementById('quest-error').style.display = 'none';
                     if(currentLevel < questData.length) {
                         document.getElementById('quest-question').innerText = questData[currentLevel].q;
-                        updateProgress(25 + (currentLevel * 5));
+                        updateProgress(15 + (currentLevel * 5));
                     } else {
                         showScreen('madlibs-screen');
-                        updateProgress(50);
+                        updateProgress(40);
                     }
                 } else {
                     document.getElementById('quest-error').style.display = 'block';
                 }
             }
-
-            // --- PACMAN LOGIC ---
-        const maze = [
-            [1,1,1,1,1,1,1,1,1,1],
-            [1,0,0,0,1,0,0,0,0,1],
-            [1,0,1,0,1,0,1,1,0,1],
-            [1,0,1,0,0,0,0,1,0,1],
-            [1,0,1,1,1,1,0,1,0,1],
-            [1,0,0,0,0,0,0,0,0,1],
-            [1,1,1,0,1,1,1,1,0,1],
-            [1,0,0,0,0,0,0,1,0,1],
-            [1,0,1,1,1,1,0,0,0,1],
-            [1,1,1,1,1,1,1,1,1,1]
-        ];
-        let pacPos = { x: 1, y: 1 };
-
-        function showPacman() {
-            showScreen('pacman-screen');
-            drawMaze();
-        }
-
-        function drawMaze() {
-            const grid = document.getElementById('pacman-grid');
-            grid.innerHTML = '';
-            let dotsLeft = 0;
-            maze.forEach((row, y) => {
-                row.forEach((cell, x) => {
-                    const div = document.createElement('div');
-                    div.className = 'cell';
-                    if (cell === 1) div.classList.add('wall');
-                    else if (x === pacPos.x && y === pacPos.y) div.innerHTML = '<span class="pacman">😋</span>';
-                    else if (cell === 0) { div.innerHTML = '<div class="dot"></div>'; dotsLeft++; }
-                    grid.appendChild(div);
-                });
-            });
-            if (dotsLeft === 0) showScreen('final-prize');
-        }
-
-        function movePacman(dx, dy) {
-            let newX = pacPos.x + dx;
-            let newY = pacPos.y + dy;
-            if (maze[newY][newX] !== 1) {
-                pacPos.x = newX; pacPos.y = newY;
-                maze[newY][newX] = 2; // Eat dot
-                drawMaze();
-            }
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if (document.getElementById('pacman-screen').style.display === 'block') {
-                if (e.key === "ArrowUp") movePacman(0, -1);
-                if (e.key === "ArrowDown") movePacman(0, 1);
-                if (e.key === "ArrowLeft") movePacman(-1, 0);
-                if (e.key === "ArrowRight") movePacman(1, 0);
-            }
-        });
 
             function revealMadLib() {
                 var n1 = document.getElementById('noun1').value;
@@ -505,39 +393,114 @@
                 var n3 = document.getElementById('noun3').value;
                 document.getElementById('final-story').innerText = n1 + "! That's what my heart does a little every time you " + n2 + " me. But there are times when I just want to " + n3 + " you.";
                 document.getElementById('story-result').style.display = 'block';
-                updateProgress(75);
+                updateProgress(60);
             }
 
-            function showClicker() {
-                showScreen('clicker-screen');
+            // --- PACMAN MISSION (15x15) ---
+            const initialMaze = [
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+                [1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],
+                [1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
+                [1,0,1,1,0,1,1,1,1,1,0,1,1,0,1],
+                [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+                [1,1,1,0,1,1,0,1,0,1,1,0,1,1,1],
+                [1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+                [1,1,1,0,1,1,0,1,0,1,1,0,1,1,1],
+                [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+                [1,0,1,1,0,1,1,1,1,1,0,1,1,0,1],
+                [1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
+                [1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],
+                [1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            ];
+            let currentMaze = JSON.parse(JSON.stringify(initialMaze));
+            let pacPos = { x: 1, y: 1 };
+            let ghostPos = { x: 13, y: 13 };
+
+            function showPacman() { showScreen('pacman-screen'); drawMaze(); }
+
+            function drawMaze() {
+                const grid = document.getElementById('pacman-grid');
+                grid.innerHTML = '';
+                let dotsLeft = 0;
+                currentMaze.forEach((row, y) => {
+                    row.forEach((cell, x) => {
+                        const div = document.createElement('div');
+                        div.className = 'cell';
+                        if (cell === 1) div.classList.add('wall');
+                        else if (x === pacPos.x && y === pacPos.y) div.innerHTML = '<span class="pacman">😋</span>';
+                        else if (x === ghostPos.x && y === ghostPos.y) div.innerHTML = '<span class="ghost">👻</span>';
+                        else if (cell === 0) { div.innerHTML = '<span class="dot">❣</span>'; dotsLeft++; }
+                        grid.appendChild(div);
+                    });
+                });
+                if (dotsLeft === 0) { 
+                    updateProgress(80);
+                    setTimeout(() => showScreen('clicker-screen'), 500); 
+                }
             }
-            
+
+            function movePlayer(dx, dy) {
+                let newX = pacPos.x + dx;
+                let newY = pacPos.y + dy;
+                if (currentMaze[newY][newX] !== 1) {
+                    pacPos.x = newX; pacPos.y = newY;
+                    currentMaze[newY][newX] = 2; // Eat heart
+                    moveGhost();
+                    checkCollision();
+                    drawMaze();
+                }
+            }
+
+            function moveGhost() {
+                const directions = [{x: 0, y: 1}, {x: 0, y: -1}, {x: 1, y: 0}, {x: -1, y: 0}];
+                let validMoves = directions.filter(dir => {
+                    let nx = ghostPos.x + dir.x;
+                    let ny = ghostPos.y + dir.y;
+                    return initialMaze[ny][nx] !== 1;
+                });
+                if (validMoves.length > 0) {
+                    let move = validMoves[Math.floor(Math.random() * validMoves.length)];
+                    ghostPos.x += move.x;
+                    ghostPos.y += move.y;
+                }
+            }
+
+            function checkCollision() {
+                if (pacPos.x === ghostPos.x && pacPos.y === ghostPos.y) {
+                    alert("A ghost caught you! 👻 Resetting mission...");
+                    pacPos = { x: 1, y: 1 };
+                    ghostPos = { x: 13, y: 13 };
+                    currentMaze = JSON.parse(JSON.stringify(initialMaze));
+                }
+            }
+
+            window.addEventListener('keydown', (e) => {
+                if (document.getElementById('pacman-screen').style.display === 'block') {
+                    if (e.key === "ArrowUp") movePlayer(0, -1);
+                    if (e.key === "ArrowDown") movePlayer(0, 1);
+                    if (e.key === "ArrowLeft") movePlayer(-1, 0);
+                    if (e.key === "ArrowRight") movePlayer(1, 0);
+                }
+            });
+
+            // --- FINAL CLICKER ---
             var clicks = 0;
             function heartClicked() {
                 if (clicks >= 20) return;
-                
                 clicks++;
                 var heartElement = document.getElementById('growingHeart');
-                
-                // GROWS 60PX EACH CLICK
                 var newSize = 100 + (clicks * 60);
                 heartElement.style.fontSize = newSize + "px";
-
                 if(clicks >= 20) {
                     heartElement.classList.add('exploding');
-                    
                     setTimeout(() => {
                         showScreen('final-prize');
                         updateProgress(100);
-                        document.body.style.backgroundColor = "#ffe6e6";
                     }, 600);
                 }
             }
         </script>
     </body>
 </html>
-
-
-
-
-
