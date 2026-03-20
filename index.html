@@ -64,7 +64,8 @@
                 transform: translate(-50%, -50%);
                 border: 2px solid #da1e76;
                 font-size: 18px;
-                line-height: 1; 
+                line-height: 42px; 
+                text-align: center;
                 pointer-events: auto;
             }
 
@@ -319,31 +320,35 @@
                 startAngle = getAngle(e.clientX, e.clientY);
                 dialWheel.style.transition = "none";
             }
-            
+             //DRAGGING
             window.onmousemove = (e) => {
                 if (!isDragging) return;
                 const currentAngle = getAngle(e.clientX, e.clientY);
                 let diff = currentAngle - startAngle;
                 if (diff < 0) diff += 360;
-                if (diff > 310) diff = 0;
+                if (diff > STOP_ANGLE) diff = STOP_ANGLE;
                 currentRotation = diff;
                 dialWheel.style.transform = `rotate(${currentRotation}deg)`;
             };
 
+            //RELEASE
             window.onmouseup = () => {
                 if (!isDragging) return;
                 isDragging = false;
-                const finalPos = holeAngles[activeNumber] + currentRotation;
-
-                if (finalPos >= (STOP_ANGLE - 20) && finalPos <= (STOP_ANGLE + 10)) {
+                const requiredRotation = (activeNumber === 0 ? 10 : activeNumber) * 30;
+                if (currentRotation >= requiredRotation) {
                     dialedCode += activeNumber;
                     display.innerText = dialedCode.padEnd(8, "_");
-                    if (dialedCode.length === 8) checkCode();
-                }
 
+                    if (dialedCode.length === 8) {
+                        checkCode();
+                    }
+                }
+                //RETURN TO START
                 dialWheel.style.transition = "transform 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95)";
                 dialWheel.style.transform = `rotate(0deg)`;
                 currentRotation = 0;
+                activeNumber = null;
             };
 
             window.ontouchmove = (e) => window.onmousemove(e.touches[0]);
@@ -353,10 +358,15 @@
                 if (dialedCode === correctCode) {
                     setTimeout(() => showScreen('game-content'), 500);
                 } else {
-                    setTimeout(() => { alert("HOW DARE YOU GET THIS WROKG!!!👿"); resetDial(); }, 500);
+                    setTimeout(() => { alert("HOW DARE YOU GET THIS WRONG!!!👿"); 
+                                      resetDial(); 
+                                     }, 500);
                 }
             }
-            function resetDial() { dialedCode = ""; display.innerText = "________"; }
+            function resetDial() { 
+                dialedCode = ""; 
+                display.innerText = "________"; 
+            }
 
             // --- NAVIGATION ---
             function showScreen(screenId) {
