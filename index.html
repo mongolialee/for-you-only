@@ -282,12 +282,13 @@
             const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
             const holeAngles = [];
 
-            numbers.forEach((num) => {
-                const customAngles = {
-                    1: 20, 2: 350, 3: 320, 4: 290, 5: 260, 
-                    6: 230, 7: 200, 8: 170, 9: 140, 0: 110
+            const customAngles = {
+                    1: 120, 2: 90, 3: 60, 4: 30, 5: 0, 
+                    6: 330, 7: 300, 8: 270, 9: 240, 0: 210
                 };
-
+            
+            numbers.forEach((num) => {
+                
                 const degree = customAngles[num];
                 holeAngles[num] = degree;
 
@@ -298,7 +299,7 @@
                 hole.className = 'dial-hole';
                 hole.innerText = num;
 
-                const radius = 98;
+                const radius = 95;
                 // Now the X and Y will actually calculate a circle
                 const x = 130 + radius * Math.cos(radian);
                 const y = 130 + radius * Math.sin(radian);
@@ -340,11 +341,14 @@
                 if (diff < 0) diff += 360;
                 
                 // Block rotation past the pointer or backwards
-                let maxRotation = STOP_ANGLE - holeAngles[activeNumber];
-                if (maxRotation < 0) maxRotation += 360;
-                if (diff > maxRotation) diff = maxRotation;
-
-                currentRotation = diff;
+                let maxPull = STOP_ANGLE - holeAngles[activeNumber];
+                if (maxPull < 0) maxPull += 360;
+                if (diff > maxPull) {
+                    currentRotation = maxPull;
+                } else {
+                    currentRotation = diff;
+                }
+                
                 dialWheel.style.transform = `rotate(${currentRotation}deg)`;
             };
 
