@@ -73,7 +73,7 @@
                 right: 15px;
                 z-index: 5;
                 border-radius: 5px;
-                transform: rotate(0deg);
+                transform: rotate(-60deg);
                 box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
                 border: 1px solid #fff;
                 pointer-events: none;
@@ -285,7 +285,7 @@
 
             const customAngles = {
                     1: 330, 2: 300, 3: 270, 4: 240, 5: 210, 
-                    6: 180, 7: 150, 8: 120, 9: 90, 0:30
+                    6: 180, 7: 150, 8: 120, 9: 90, 0: 30
                 };
             
             numbers.forEach((num) => {
@@ -308,8 +308,10 @@
                 hole.style.left = x + 'px';
                 hole.style.top = y + 'px';
 
-                hole.onmousedown = (e) => startDial(e, num);
-                hole.ontouchstart = (e) => startDial(e.touches[0], num);
+                hole.style.left = x + 'px';
+                hole.style.top = y + 'px';
+
+                hole.onpointerdown = (e) => startDial(e, num);
 
                 dialWheel.appendChild(hole);
             });
