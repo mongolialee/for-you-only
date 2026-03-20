@@ -293,7 +293,7 @@
                 hole.className = 'dial-hole';
                 hole.innerText = num;
                 
-                const angle = (i * 30) - 60;
+                const angle = 30 + (i * 30);
                 holeAngles[num] = angle;
 
                 const radius = 95;
@@ -325,7 +325,7 @@
                 if (!isDragging) return;
                 const currentAngle = getAngle(e.clientX, e.clientY);
                 let diff = currentAngle - startAngle;
-                if (diff < 0) diff += 360;
+                if (diff < 0) return;
                 if (diff > STOP_ANGLE) diff = STOP_ANGLE;
                 currentRotation = diff;
                 dialWheel.style.transform = `rotate(${currentRotation}deg)`;
@@ -336,7 +336,11 @@
                 if (!isDragging) return;
                 isDragging = false;
                 const requiredRotation = (activeNumber === 0 ? 10 : activeNumber) * 30;
-                if (currentRotation >= requiredRotation) {
+                const SNAP_THRESHOLD = 10;
+                if (
+                    currentRotation >= requiredRotation &&
+                    Math.abs(currentRotation - STOP_ANGLE) < SNAP_THRESHOLD
+                    ) {
                     dialedCode += activeNumber;
                     display.innerText = dialedCode.padEnd(8, "_");
 
