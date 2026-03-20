@@ -132,6 +132,52 @@
             /* INVISIBILITY POTION */
             #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #final-prize, .error { display: none; }
 
+            #pacman-grid {
+                display: grid;
+                grid-template-columns: repeat(10, 30px);
+                grid-template-rows: repeat(10, 30px);
+                gap: 1px;
+                background: #222;
+                padding: 5px;
+                border: 4px solid #ff4d4d;
+                margin: 20px auto;
+                width: 310px;
+            }
+
+            .cell {
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: centers;
+                justify-content: center;
+            }
+            .wall {
+                background-color: #555;
+                border-radius: 2px;
+            }
+
+            .dot { 
+                width: 6px;
+                height: 6px; 
+                background: white;
+                border-radius: 50%;
+            }
+
+            .pacman {
+                font-size: 24px;
+                transform: scale(-1);
+            }
+
+            controls {
+                margin-top: 10px;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5px;
+                width: 150px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
             /* HEART DESIGNS*/
             #heart-area {
                 height: 200px;
@@ -197,6 +243,20 @@
                 <br>
                 <button onclick="checkQuest()">SUBMIT</button>
                 <p id="quest-error" class="error" style="color:white; display:none;">AHAHAH, YOU GOT IT WRONG 😝</p>
+            </div>
+        </div>
+
+        <div id="pacman-screen">
+            <div class="container-box">
+                <h2>FINAL MISSION</h2>
+                <p>Eat all the dots, Jason!</p>
+                <div id="pacman-grid"></div>
+                <div class="controls">
+                    <button style="grid-column: 2;" onclick="movePacman(0, -1)">UP</button>
+                    <button style="grid-column: 1;" onclick="movePacman(-1, 0)">L</button>
+                    <button style="grid-column: 2;" onclick="movePacman(0, 1)">DWN</button>
+                    <button style="grid-column: 3;" onclick="movePacman(1, 0)">R</button>
+                </div>
             </div>
         </div>
 
@@ -382,6 +442,62 @@
                     document.getElementById('quest-error').style.display = 'block';
                 }
             }
+
+            // --- PACMAN LOGIC ---
+        const maze = [
+            [1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,1,0,0,0,0,1],
+            [1,0,1,0,1,0,1,1,0,1],
+            [1,0,1,0,0,0,0,1,0,1],
+            [1,0,1,1,1,1,0,1,0,1],
+            [1,0,0,0,0,0,0,0,0,1],
+            [1,1,1,0,1,1,1,1,0,1],
+            [1,0,0,0,0,0,0,1,0,1],
+            [1,0,1,1,1,1,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1]
+        ];
+        let pacPos = { x: 1, y: 1 };
+
+        function showPacman() {
+            showScreen('pacman-screen');
+            drawMaze();
+        }
+
+        function drawMaze() {
+            const grid = document.getElementById('pacman-grid');
+            grid.innerHTML = '';
+            let dotsLeft = 0;
+            maze.forEach((row, y) => {
+                row.forEach((cell, x) => {
+                    const div = document.createElement('div');
+                    div.className = 'cell';
+                    if (cell === 1) div.classList.add('wall');
+                    else if (x === pacPos.x && y === pacPos.y) div.innerHTML = '<span class="pacman">😋</span>';
+                    else if (cell === 0) { div.innerHTML = '<div class="dot"></div>'; dotsLeft++; }
+                    grid.appendChild(div);
+                });
+            });
+            if (dotsLeft === 0) showScreen('final-prize');
+        }
+
+        function movePacman(dx, dy) {
+            let newX = pacPos.x + dx;
+            let newY = pacPos.y + dy;
+            if (maze[newY][newX] !== 1) {
+                pacPos.x = newX; pacPos.y = newY;
+                maze[newY][newX] = 2; // Eat dot
+                drawMaze();
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (document.getElementById('pacman-screen').style.display === 'block') {
+                if (e.key === "ArrowUp") movePacman(0, -1);
+                if (e.key === "ArrowDown") movePacman(0, 1);
+                if (e.key === "ArrowLeft") movePacman(-1, 0);
+                if (e.key === "ArrowRight") movePacman(1, 0);
+            }
+        });
 
             function revealMadLib() {
                 var n1 = document.getElementById('noun1').value;
