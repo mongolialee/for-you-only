@@ -69,13 +69,14 @@
                 width: 12px;
                 height: 55px;
                 background: linear-gradient(to bottom, #bbb, #777);
-                bottom: 30px;
-                right: 40px;
+                top: 100px;
+                right: 15px;
                 z-index: 5;
                 border-radius: 5px;
-                transform: rotate(-35deg);
+                transform: rotate(0deg);
                 box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
                 border: 1px solid #fff;
+                pointer-events: none;
             }
 
             #dial-display {
@@ -299,7 +300,7 @@
                 hole.className = 'dial-hole';
                 hole.innerText = num;
 
-                const radius = 95;
+                const radius = 90;
                 // Now the X and Y will actually calculate a circle
                 const x = 130 + radius * Math.cos(radian);
                 const y = 130 + radius * Math.sin(radian);
@@ -350,6 +351,9 @@
                 }
                 
                 dialWheel.style.transform = `rotate(${currentRotation}deg)`;
+                document.querySelectorAll('.dial-hole').forEach(hole => {
+                    hole.style.transform = `translate(-50%, -50%) rotate(${-currentRotation}deg)`;
+                });
             };
 
             window.onmouseup = () => {
