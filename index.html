@@ -286,7 +286,7 @@
                 const hole = document.createElement('div');
                 hole.className = 'dial-hole';
                 hole.innerText = num;
-                const angle = (i * 28) - 50; 
+                const angle = (i * 28) - 90; 
                 holeAngles[num] = angle;
                 const radius = 98;
                 const x = 130 + radius * Math.cos(angle * Math.PI / 180);
@@ -304,6 +304,15 @@
             }
 
             function startDial(e, num) {
+                const startPosAngle = holeAngles[num];
+                const distanceToStop = Math.abs(STOP_ANGLE - startPosAngle);
+
+                // ❌ Prevent starting too close to the metal stop
+                if (distanceToStop < 25) {
+                    console.log("Too close to stop — invalid start");
+                    return;
+                }
+
                 isDragging = true;
                 activeNumber = num;
                 startAngle = getAngle(e.clientX, e.clientY);
@@ -330,22 +339,22 @@
 
                 const targetRotation = STOP_ANGLE - holeAngles[activeNumber];
 
-                // VERY STRICT: must reach the stop (like real rotary phone)
-                if (currentRotation >= targetRotation - 2) {
+                // 🎯 MUST release RIGHT at the stop
+                const isAtStop = Math.abs(currentRotation - targetRotation) < 4;
+
+                if (isAtStop) {
                     dialedCode += activeNumber;
                     display.innerText = dialedCode.padEnd(8, "_");
 
                     if (dialedCode.length === 8) checkCode();
                 } else {
-                        // Failed attempt = reset that digit feel
-                        console.log("Did not reach pointer — invalid input");
+                    console.log("❌ Did not release at stop — invalid");
                 }
 
-                dialWheel.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+                dialWheel.style.transition = "transform 0.6s ease-out";
                 dialWheel.style.transform = `rotate(0deg)`;
-                currentRotation = 0;
 
-                if (diff < 0 || diff > 300) return;
+                currentRotation = 0;
             };
 
             window.ontouchmove = (e) => window.onmousemove(e.touches[0]);
