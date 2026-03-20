@@ -236,7 +236,7 @@
         <div id="pacman-screen">
             <div class="container-box">
                 <h2>MISSION 3</h2>
-                <p>RUN JASON! THE GHOST IS CHASING YOU!</p>
+                <p>RUN BEBE! THE GHOST IS CHASING YOU!</p>
                 <div id="pacman-grid"></div>
                 <div class="controls">
                     <button style="grid-column: 2;" onclick="movePlayer(0, -1)">UP</button>
@@ -327,19 +327,25 @@
             window.onmouseup = () => {
                 if (!isDragging) return;
                 isDragging = false;
-                
+
                 const targetRotation = STOP_ANGLE - holeAngles[activeNumber];
-                
-                // PRECISION CHECK: Must be exactly at the pointer (within 5 deg)
-                if (Math.abs(currentRotation - targetRotation) < 6) {
+
+                // VERY STRICT: must reach the stop (like real rotary phone)
+                if (currentRotation >= targetRotation - 2) {
                     dialedCode += activeNumber;
                     display.innerText = dialedCode.padEnd(8, "_");
+
                     if (dialedCode.length === 8) checkCode();
+                } else {
+                        // Failed attempt = reset that digit feel
+                        console.log("Did not reach pointer — invalid input");
                 }
 
                 dialWheel.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
                 dialWheel.style.transform = `rotate(0deg)`;
                 currentRotation = 0;
+
+                if (diff < 0 || diff > 300) return;
             };
 
             window.ontouchmove = (e) => window.onmousemove(e.touches[0]);
@@ -462,28 +468,60 @@
             }
 
             function moveSmartGhost() {
-                const directions = [{x: 0, y: 1}, {x: 0, y: -1}, {x: 1, y: 0}, {x: -1, y: 0}];
-                let bestMove = ghostPos;
-                let minDistance = Infinity;
+                const directions = [
+                    {x: 0, y: 1},
+                    {x: 0, y: -1},
+                    {x: 1, y: 0},
+                    {x: -1, y: 0}
+                ];
 
-                directions.forEach(dir => {
-                    let nx = ghostPos.x + dir.x;
-                    let ny = ghostPos.y + dir.y;
-                    if (initialMaze[ny][nx] !== 1) {
-                        // Calculate Manhattan Distance to Jason
-                        let dist = Math.abs(nx - pacPos.x) + Math.abs(ny - pacPos.y);
-                        if (dist < minDistance) {
-                            minDistance = dist;
-                            bestMove = {x: nx, y: ny};
-                        }
-                    }
-                });
-                ghostPos = bestMove;
+            let queue = [];
+            let visited = new Set();
+            let parent = {};
+
+            queue.push(ghostPos);
+            visited.add(`${ghostPos.x},${ghostPos.y}`);
+
+            let found = false;
+
+        while (queue.length > 0) {
+            let current = queue.shift();
+            if (current.x === pacPos.x && current.y === pacPos.y) {
+                found = true;
+                break;
             }
+
+            for (let dir of directions) {
+                let nx = current.x + dir.x;
+                let ny = current.y + dir.y;
+
+                if (
+                    initialMaze[ny][nx] !== 1 &&
+                    !visited.has(`${nx},${ny}`)
+                ) {
+                    queue.push({x: nx, y: ny});
+                    visited.add(`${nx},${ny}`);
+                    parent[`${nx},${ny}`] = current;
+                }
+            }
+        }
+
+        if (!found) return;
+
+        // Backtrack from player to ghost
+        let step = pacPos;
+        while (parent[`${step.x},${step.y}`] &&
+               !(parent[`${step.x},${step.y}`].x === ghostPos.x &&
+                 parent[`${step.x},${step.y}`].y === ghostPos.y)) {
+            step = parent[`${step.x},${step.y}`];
+        }
+
+        ghostPos = step;
+    }
 
             function checkCollision() {
                 if (pacPos.x === ghostPos.x && pacPos.y === ghostPos.y) {
-                    alert("GHOST CAUGHT YOU! 👻 Jason had to start over!");
+                    alert("GHOST CAUGHT YOU! 👻 You had to start over!");
                     pacPos = { x: 1, y: 1 };
                     ghostPos = { x: 13, y: 13 };
                     currentMaze = JSON.parse(JSON.stringify(initialMaze));
