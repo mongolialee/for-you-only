@@ -75,6 +75,7 @@
                 border-radius: 5px;
                 transform: rotate(-35deg);
                 box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+                border: 1px solid #fff;
             }
 
             #dial-display {
@@ -127,7 +128,7 @@
 
             #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #pacman-screen, #final-prize, .error { display: none; }
 
-            /* BIGGER MAZE STYLES */
+            /* MAZE STYLES */
             #pacman-grid {
                 display: grid;
                 grid-template-columns: repeat(15, 22px);
@@ -190,7 +191,7 @@
                         <div class="finger-stop"></div>
                         <div id="dial-wheel"></div>
                 </div>
-                <p>Hint: 11-09-2023 🥴</p>
+                <p>Hint: Your Credit Card Info 🥴</p>
                 <br>
                 <button onclick="resetDial()">RESET</button>
             </div>
@@ -235,7 +236,7 @@
         <div id="pacman-screen">
             <div class="container-box">
                 <h2>MISSION 3</h2>
-                <p>Don't let the Ghost catch you!</p>
+                <p>RUN JASON! THE GHOST IS CHASING YOU!</p>
                 <div id="pacman-grid"></div>
                 <div class="controls">
                     <button style="grid-column: 2;" onclick="movePlayer(0, -1)">UP</button>
@@ -276,7 +277,7 @@
             let startAngle = 0;
             let currentRotation = 0;
             let activeNumber = null;
-            const STOP_ANGLE = 145; 
+            const STOP_ANGLE = 145; // The angle of the Finger Stop
 
             const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
             const holeAngles = [];
@@ -314,8 +315,11 @@
                 const currentAngle = getAngle(e.clientX, e.clientY);
                 let diff = currentAngle - startAngle;
                 if (diff < 0) diff += 360;
+                
+                // Block rotation past the pointer or backwards
                 const maxRotation = STOP_ANGLE - holeAngles[activeNumber];
-                if (diff > maxRotation) diff = maxRotation;
+                if (diff > maxRotation + 10) return; // Stop physical movement past pointer
+
                 currentRotation = diff;
                 dialWheel.style.transform = `rotate(${currentRotation}deg)`;
             };
@@ -323,12 +327,16 @@
             window.onmouseup = () => {
                 if (!isDragging) return;
                 isDragging = false;
-                const maxRotation = STOP_ANGLE - holeAngles[activeNumber];
-                if (currentRotation >= maxRotation - 10) {
+                
+                const targetRotation = STOP_ANGLE - holeAngles[activeNumber];
+                
+                // PRECISION CHECK: Must be exactly at the pointer (within 5 deg)
+                if (Math.abs(currentRotation - targetRotation) < 6) {
                     dialedCode += activeNumber;
                     display.innerText = dialedCode.padEnd(8, "_");
                     if (dialedCode.length === 8) checkCode();
                 }
+
                 dialWheel.style.transition = "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
                 dialWheel.style.transform = `rotate(0deg)`;
                 currentRotation = 0;
@@ -341,7 +349,7 @@
                 if (dialedCode === correctCode) {
                     setTimeout(() => showScreen('game-content'), 500);
                 } else {
-                    setTimeout(() => { alert("Wrong code!"); resetDial(); }, 500);
+                    setTimeout(() => { alert("Incorrect Code! Starting Over!"); resetDial(); }, 500);
                 }
             }
             function resetDial() { dialedCode = ""; display.innerText = "________"; }
@@ -396,7 +404,7 @@
                 updateProgress(60);
             }
 
-            // --- PACMAN MISSION (15x15) ---
+            // --- PACMAN MISSION (CHASE MODE) ---
             const initialMaze = [
                 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
                 [1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
@@ -446,30 +454,36 @@
                 let newY = pacPos.y + dy;
                 if (currentMaze[newY][newX] !== 1) {
                     pacPos.x = newX; pacPos.y = newY;
-                    currentMaze[newY][newX] = 2; // Eat heart
-                    moveGhost();
+                    currentMaze[newY][newX] = 2; 
+                    moveSmartGhost();
                     checkCollision();
                     drawMaze();
                 }
             }
 
-            function moveGhost() {
+            function moveSmartGhost() {
                 const directions = [{x: 0, y: 1}, {x: 0, y: -1}, {x: 1, y: 0}, {x: -1, y: 0}];
-                let validMoves = directions.filter(dir => {
+                let bestMove = ghostPos;
+                let minDistance = Infinity;
+
+                directions.forEach(dir => {
                     let nx = ghostPos.x + dir.x;
                     let ny = ghostPos.y + dir.y;
-                    return initialMaze[ny][nx] !== 1;
+                    if (initialMaze[ny][nx] !== 1) {
+                        // Calculate Manhattan Distance to Jason
+                        let dist = Math.abs(nx - pacPos.x) + Math.abs(ny - pacPos.y);
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                            bestMove = {x: nx, y: ny};
+                        }
+                    }
                 });
-                if (validMoves.length > 0) {
-                    let move = validMoves[Math.floor(Math.random() * validMoves.length)];
-                    ghostPos.x += move.x;
-                    ghostPos.y += move.y;
-                }
+                ghostPos = bestMove;
             }
 
             function checkCollision() {
                 if (pacPos.x === ghostPos.x && pacPos.y === ghostPos.y) {
-                    alert("A ghost caught you! 👻 Resetting mission...");
+                    alert("GHOST CAUGHT YOU! 👻 Jason had to start over!");
                     pacPos = { x: 1, y: 1 };
                     ghostPos = { x: 13, y: 13 };
                     currentMaze = JSON.parse(JSON.stringify(initialMaze));
