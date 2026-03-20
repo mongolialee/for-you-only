@@ -277,15 +277,15 @@
             let startAngle = 0;
             let currentRotation = 0;
             let activeNumber = null;
-            const STOP_ANGLE = 145; // The angle of the Finger Stop
+            const STOP_ANGLE = 150; // The angle of the Finger Stop
 
             const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
             const holeAngles = [];
 
             numbers.forEach((num) => {
                 const customAngles = {
-                    1: 130, 2: 160, 3: 190, 4: 220, 5: 250, 
-                    6: 280, 7: 310, 8: 340, 9: 10, 0: 40
+                    1: 20, 2: 350, 3: 320, 4: 290, 5: 260, 
+                    6: 230, 7: 200, 8: 170, 9: 140, 0: 110
                 };
 
                 const degree = customAngles[num];
@@ -340,8 +340,9 @@
                 if (diff < 0) diff += 360;
                 
                 // Block rotation past the pointer or backwards
-                const maxRotation = STOP_ANGLE - holeAngles[activeNumber];
-                if (diff > maxRotation + 10) return; // Stop physical movement past pointer
+                let maxRotation = STOP_ANGLE - holeAngles[activeNumber];
+                if (maxRotation < 0) maxRotation += 360;
+                if (diff > maxRotation) diff = maxRotation;
 
                 currentRotation = diff;
                 dialWheel.style.transform = `rotate(${currentRotation}deg)`;
