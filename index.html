@@ -57,7 +57,9 @@
                 border-radius: 50%;
                 color: #da1e76;
                 font-weight: bold;
-                line-height: 42px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 cursor: grab;
                 transform: translate(-50%, -50%);
                 border: 2px solid #da1e76;
@@ -321,7 +323,7 @@
                 const currentAngle = getAngle(e.clientX, e.clientY);
                 let diff = currentAngle - startAngle;
                 if (diff < 0) diff += 360;
-                if (diff > 310) return;
+                if (diff > 310) diff = 0;
                 currentRotation = diff;
                 dialWheel.style.transform = `rotate(${currentRotation}deg)`;
             };
@@ -331,7 +333,7 @@
                 isDragging = false;
                 const finalPos = holeAngles[activeNumber] + currentRotation;
 
-                if (finalPos >= STOP_ANGLE - 15) {
+                if (finalPos >= STOP_ANGLE - 20) {
                     dialedCode += activeNumber;
                     display.innerText = dialedCode.padEnd(8, "_");
                     if (dialedCode.length === 8) checkCode();
@@ -349,7 +351,7 @@
                 if (dialedCode === correctCode) {
                     setTimeout(() => showScreen('game-content'), 500);
                 } else {
-                    setTimeout(() => { alert("Incorrect Code! Starting Over!"); resetDial(); }, 500);
+                    setTimeout(() => { alert("HOW DARE YOU GET THIS WROKG!!!👿"); resetDial(); }, 500);
                 }
             }
             function resetDial() { dialedCode = ""; display.innerText = "________"; }
