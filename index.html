@@ -284,6 +284,7 @@
             let currentRotation = 0;
             let activeNumber = null;
             const STOP_ANGLE = 155; // The angle of the Finger Stop
+            const POINTER_ANGLE = 300;
 
             const numbers = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1];
             const holeAngles = [];
@@ -314,10 +315,12 @@
                 return Math.atan2(y - (rect.top + rect.height/2), x - (rect.left + rect.width/2)) * 180 / Math.PI;
             }
 
+            let startNumberAngle = 0;
             function startDial(e, num) {
                 isDragging = true;
                 activeNumber = num;
                 startAngle = getAngle(e.clientX, e.clientY);
+                startNumberAngle = holeAngles[num];
                 dialWheel.style.transition = "none";
             }
              //DRAGGING
@@ -335,12 +338,13 @@
             window.onmouseup = () => {
                 if (!isDragging) return;
                 isDragging = false;
-                const requiredRotation = (activeNumber === 0 ? 10 : activeNumber) * 30;
-                const SNAP_THRESHOLD = 10;
-                if (
-                    currentRotation >= requiredRotation &&
-                    Math.abs(currentRotation - STOP_ANGLE) < SNAP_THRESHOLD
-                    ) {
+                const SNAP_THRESHOLD = 12;
+                let finalAngle = (startNumberAngle + currentRotation) % 360;
+
+                if (finalAngle < 0) finalAngle += 360;
+                let diff = Math.abs(finalAngle - POINTER_ANGLE);
+                if (diff > 180) diff = 360 - diff;
+                if (diff < SNAP_THRESHOLD) {
                     dialedCode += activeNumber;
                     display.innerText = dialedCode.padEnd(8, "_");
 
