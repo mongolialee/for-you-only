@@ -64,6 +64,8 @@
                 transform: translate(-50%, -50%);
                 border: 2px solid #da1e76;
                 font-size: 18px;
+                line-height: 1; 
+                pointer-events: auto;
             }
 
             .finger-stop {
@@ -333,7 +335,7 @@
                 isDragging = false;
                 const finalPos = holeAngles[activeNumber] + currentRotation;
 
-                if (finalPos >= STOP_ANGLE - 20) {
+                if (finalPos >= STOP_ANGLE - 0) {
                     dialedCode += activeNumber;
                     display.innerText = dialedCode.padEnd(8, "_");
                     if (dialedCode.length === 8) checkCode();
