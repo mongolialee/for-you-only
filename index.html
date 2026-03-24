@@ -77,11 +77,11 @@
                 width: 12px;
                 height: 50px;
                 background: linear-gradient(to bottom, #bbb, #777);
-                top: 45px;
-                right: 45px;
+                top: 150px;
+                right: 75px;
                 z-index: 5;
                 border-radius: 5px;
-                transform: rotate(-45deg);
+                transform: rotate(-60deg);
                 box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
             }
             #dial-display {
@@ -136,12 +136,29 @@
                     <div class="finger-stop"></div>
                     <div id="dial-wheel"></div>
                 </div>
+                <p>Hint: Your credit card number 😏</p>
                 <button onclick="resetDial()">RESET</button>
             </div>
         </div>
 
-        <div id="game-content"><div class="container-box"><h1>❤️ ACCESS GRANTED ❤️</h1><p>Welcome, Agent Jason.</p><div style="font-size:100px; cursor:pointer;" onclick="showQuest()">🎮</div></div></div>
-        <div id="quest-screen"><div class="container-box"><h2 id="level-title">MISSION 1</h2><p id="quest-question">What is my middle name?</p><input type="text" id="questInput"><br><button onclick="checkQuest()">SUBMIT</button></div></div>
+        <div id="game-content">
+            <div class="container-box">
+                <h1>❤️ ACCESS GRANTED ❤️</h1>
+                <p>Welcome, Agent Jason.</p>
+                <div style="font-size:100px; 
+                    cursor:pointer;" 
+                    onclick="showQuest()">🎮</div>
+            </div>
+        </div>
+        <div id="quest-screen">
+            <div class="container-box">
+                <h2 id="level-title">MISSION 1</h2>
+                <p id="quest-question">What is my middle name?</p>
+                <input type="text" id="questInput">
+                <br>
+                <button onclick="checkQuest()">SUBMIT</button>
+            </div>
+        </div>
 
         <div id="madlibs-screen">
             <div class="container-box">
@@ -161,7 +178,7 @@
         <div id="pacman-screen">
             <div class="container-box">
                 <h2>MISSION 3</h2>
-                <p>Eat the hearts! 👻 LIVES: <span id="life-count">3</span></p>
+                <p>EAT MEEE!!! 👻 LIVES: <span id="life-count">3</span></p>
                 <div id="pacman-grid"></div>
                 <div class="d-pad">
                     <div class="d-btn" style="grid-area: up" onclick="movePlayer(0,-1)">↑</div>
@@ -175,13 +192,19 @@
         <div id="clicker-screen">
             <div class="container-box">
                 <h2>FINAL MISSION</h2>
-                <p>Click the heart 20 times!</p>
+                <p>SHOW ME SOME LOVEEEE!</p>
                 <div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div>
                 <p id="click-count">Clicks: 0/20</p>
             </div>
         </div>
 
-        <div id="final-prize"><div class="container-box"><h1>MISSION COMPLETE!!!</h1><p>I love you Jason!!!!!</p><p>Your prize is with MEEEEEE!</p></div></div>
+        <div id="final-prize">
+            <div class="container-box">
+                <h1>MISSION COMPLETE!!!</h1>
+                <p>Your prize is........... with MEEEEEE!</p>
+                <p>MWAHAHAHAHAHA</p>
+            </div>
+        </div>
 
         <script>
         const dialWheel = document.getElementById('dial-wheel');
