@@ -71,17 +71,17 @@
                 border: 2px solid #da1e76;
                 font-size: 18px;
             }
-            /* PIN CENTERED BETWEEN 0 and 1 (approx 15 degrees) */
+            /* REVERTED PIN POSITION */
             .finger-stop {
                 position: absolute;
-                width: 10px;
+                width: 12px;
                 height: 50px;
                 background: linear-gradient(to bottom, #bbb, #777);
-                top: 35%;
-                right: 25px;
+                top: 45px;
+                right: 45px;
                 z-index: 5;
                 border-radius: 5px;
-                transform: rotate(-15deg);
+                transform: rotate(-45deg);
                 box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
             }
             #dial-display {
@@ -104,33 +104,25 @@
                 padding: 5px;
                 border: 4px solid #da1e76;
                 margin: 10px auto;
-                width: 300px;
+                width: 280px;
             }
-            .cell { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+            .cell { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
             .wall { background-color: #ffb3d9; }
             .dot { color: #ff4d4d; font-size: 8px; }
 
-            /* MOBILE CONTROLS */
             .d-pad {
                 display: grid;
                 grid-template-areas: ". up ." "left . right" ". down .";
                 gap: 5px;
-                width: 150px;
+                width: 140px;
                 margin: 10px auto;
             }
-            .d-btn {
-                background: #da1e76;
-                color: white;
-                padding: 15px;
-                border-radius: 8px;
-                font-weight: bold;
-                text-align: center;
-            }
+            .d-btn { background: #da1e76; color: white; padding: 12px; border-radius: 8px; font-weight: bold; }
 
             #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #pacman-screen, #final-prize { display: none; }
             button { background-color: #ff4d4d; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
             input { padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin: 10px 0; width: 85%; font-size: 16px; }
-            .heart-btn { font-size: 80px; cursor: pointer; transition: transform 0.1s; margin: 20px 0; }
+            .heart-btn { font-size: 80px; cursor: pointer; transition: transform 0.1s; margin: 15px 0; display: inline-block;}
         </style>
     </head>
     <body>
@@ -149,17 +141,15 @@
         </div>
 
         <div id="game-content"><div class="container-box"><h1>❤️ ACCESS GRANTED ❤️</h1><p>Welcome, Agent Jason.</p><div style="font-size:100px; cursor:pointer;" onclick="showQuest()">🎮</div></div></div>
-        
         <div id="quest-screen"><div class="container-box"><h2 id="level-title">MISSION 1</h2><p id="quest-question">What is my middle name?</p><input type="text" id="questInput"><br><button onclick="checkQuest()">SUBMIT</button></div></div>
 
         <div id="madlibs-screen">
             <div class="container-box">
                 <h2>MISSION 2</h2>
                 <p>Fill in the blanks!</p>
-                <input type="text" id="noun1" placeholder="Something you want">
-                <input type="text" id="noun2" placeholder="An action">
-                <input type="text" id="noun3" placeholder="Someone special">
-                <br>
+                <input type="text" id="noun1" placeholder="Something you want"><br>
+                <input type="text" id="noun2" placeholder="An action"><br>
+                <input type="text" id="noun3" placeholder="Someone special"><br>
                 <button onclick="revealMadLib()">REVEAL STORY</button>
                 <div id="story-result" style="display:none; margin-top:20px;">
                     <p id="final-story"></p>
@@ -194,7 +184,6 @@
         <div id="final-prize"><div class="container-box"><h1>MISSION COMPLETE!!!</h1><p>I love you Jason!!!!!</p><p>Your prize is with MEEEEEE!</p></div></div>
 
         <script>
-        // --- DIAL LOGIC ---
         const dialWheel = document.getElementById('dial-wheel');
         const display = document.getElementById('dial-display');
         const correctCode = "11092023";
@@ -202,10 +191,10 @@
         let isSpinning = false;
 
         const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-        const STOP_ANGLE = 15; // Centered between 0 and 1
+        const STOP_ANGLE = 45; // Match original stop placement
 
         numbers.forEach((num, index) => {
-            const angle = 330 - (index * 30); 
+            const angle = 300 - (index * 30); 
             const hole = document.createElement('div');
             hole.className = 'dial-hole';
             hole.innerText = num;
@@ -225,12 +214,9 @@
             dialWheel.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
             dialWheel.style.transform = `rotate(${targetRotation}deg)`;
 
-            // Wait for overlap before showing number
             setTimeout(() => {
                 dialedCode += num;
                 display.innerText = dialedCode.padEnd(8, "_");
-                
-                // Return animation
                 setTimeout(() => {
                     dialWheel.style.transition = "transform 0.6s ease-out";
                     dialWheel.style.transform = `rotate(0deg)`;
@@ -248,7 +234,6 @@
         }
         function resetDial() { dialedCode = ""; display.innerText = "________"; }
 
-        // --- NAVIGATION ---
         function showScreen(id) {
             const screens = ['login-screen', 'game-content', 'quest-screen', 'madlibs-screen', 'pacman-screen', 'clicker-screen', 'final-prize'];
             screens.forEach(s => document.getElementById(s).style.display = 'none');
@@ -256,7 +241,6 @@
         }
         function showQuest() { showScreen('quest-screen'); }
 
-        // --- QUEST LOGIC ---
         var currentLevel = 0;
         var questData = [
             {q: "What is my middle name?", a: "harmony"},
@@ -283,7 +267,6 @@
             document.getElementById('story-result').style.display = 'block';
         }
 
-        // --- PACMAN ENGINE ---
         const maze = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
             [1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
@@ -363,13 +346,12 @@
             }
         });
 
-        // --- FINAL CLICKER ---
         let clicks = 0;
         function heartClicked() {
             clicks++;
             let h = document.getElementById('growingHeart');
             let c = document.getElementById('click-count');
-            h.style.transform = `scale(${1 + clicks * 0.15})`;
+            h.style.transform = `scale(${1 + clicks * 0.1})`;
             c.innerText = `Clicks: ${clicks}/20`;
             if (clicks >= 20) showScreen('final-prize');
         }
