@@ -194,7 +194,6 @@
                 <h2>FINAL MISSION</h2>
                 <p>SHOW ME SOME LOVEEEE!</p>
                 <div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div>
-                <p id="click-count">Clicks: 0/20</p>
             </div>
         </div>
 
@@ -253,7 +252,7 @@
 
         function checkCode() {
             if (dialedCode === correctCode) showScreen('game-content');
-            else { alert("Incorrect Code!"); resetDial(); }
+            else { alert("HOW DARE YOU NOT KNOW THIS! 👿"); resetDial(); }
         }
         function resetDial() { dialedCode = ""; display.innerText = "________"; }
 
@@ -269,7 +268,7 @@
             {q: "What is my middle name?", a: "harmony"},
             {q: "How old was I when I got closed line by a volleyball net?", a: "7"},
             {q: "Where is my dream vacation in Mexico?", a: "cancun"},
-            {q: "What do I do not like about some food but love about desserts?", a: "sweet"},
+            {q: "What was my first dog's name?", a: "russel"},
             {q: "How old was I when I got my ears pierced?", a: "12"}
         ];
         function checkQuest() {
@@ -279,7 +278,7 @@
                 document.getElementById('questInput').value = "";
                 if(currentLevel < questData.length) document.getElementById('quest-question').innerText = questData[currentLevel].q;
                 else showScreen('madlibs-screen');
-            } else { alert("Try again!"); }
+            } else { alert("YOU KNOW NOTHING ABOUT ME!!!!"); }
         }
 
         function revealMadLib() {
