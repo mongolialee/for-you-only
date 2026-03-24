@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>❤️ A Game Just For You! ❤️</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <style>
             /* AESTHETIC STATIONERY STYLING */
             body { 
@@ -10,23 +11,25 @@
                 text-align: center;
                 font-family: 'Courier New', Courier, monospace;
                 margin: 0;
-                padding: 20px;
+                padding: 10px;
                 background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
                 background-size: 20px 20px;
                 user-select: none;
                 overflow-x: hidden;
+                touch-action: manipulation;
             }
             .container-box { 
                 background: #fff;
-                padding: 30px;
+                padding: 20px;
                 border-radius: 2px;
                 display: inline-block;
                 border-bottom: 4px solid #d1d1d1;
                 border-right: 4px solid #d1d1d1;
                 border-left: 1px solid #eee;
                 border-top: 1px solid #eee;
-                width: 350px;
-                margin-top: 20px;
+                width: 90%;
+                max-width: 350px;
+                margin-top: 10px;
                 box-shadow: 10px 10px 0px rgba(218, 30, 118, 0.1);
                 position: relative;
             }
@@ -68,18 +71,18 @@
                 border: 2px solid #da1e76;
                 font-size: 18px;
             }
-            /* FIXED TO EXACTLY 90 DEGREES */
+            /* PIN CENTERED BETWEEN 0 and 1 (approx 15 degrees) */
             .finger-stop {
                 position: absolute;
-                width: 12px;
-                height: 55px;
+                width: 10px;
+                height: 50px;
                 background: linear-gradient(to bottom, #bbb, #777);
-                top: 50%;
-                right: 10px;
+                top: 35%;
+                right: 25px;
                 z-index: 5;
                 border-radius: 5px;
-                transform: translateY(-50%); /* Perfectly centered at 90 deg / 3 o'clock */
-                box-shadow: 2px 0px 5px rgba(0,0,0,0.5);
+                transform: rotate(-15deg);
+                box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
             }
             #dial-display {
                 font-size: 26px;
@@ -95,22 +98,39 @@
             /* PACMAN STYLES */
             #pacman-grid {
                 display: grid;
-                grid-template-columns: repeat(15, 22px);
+                grid-template-columns: repeat(15, 1fr);
                 gap: 1px;
                 background: #333;
                 padding: 5px;
                 border: 4px solid #da1e76;
-                margin: 20px auto;
-                width: 345px;
+                margin: 10px auto;
+                width: 300px;
             }
-            .cell { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+            .cell { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
             .wall { background-color: #ffb3d9; }
-            .dot { color: #ff4d4d; font-size: 10px; }
+            .dot { color: #ff4d4d; font-size: 8px; }
+
+            /* MOBILE CONTROLS */
+            .d-pad {
+                display: grid;
+                grid-template-areas: ". up ." "left . right" ". down .";
+                gap: 5px;
+                width: 150px;
+                margin: 10px auto;
+            }
+            .d-btn {
+                background: #da1e76;
+                color: white;
+                padding: 15px;
+                border-radius: 8px;
+                font-weight: bold;
+                text-align: center;
+            }
 
             #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #pacman-screen, #final-prize { display: none; }
             button { background-color: #ff4d4d; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-            input { padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin: 10px 0; width: 85%; }
-            .heart-btn { font-size: 100px; cursor: pointer; transition: transform 0.2s; }
+            input { padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin: 10px 0; width: 85%; font-size: 16px; }
+            .heart-btn { font-size: 80px; cursor: pointer; transition: transform 0.1s; margin: 20px 0; }
         </style>
     </head>
     <body>
@@ -128,11 +148,49 @@
             </div>
         </div>
 
-        <div id="game-content"><div class="container-box"><h1>❤️ ACCESS GRANTED ❤️</h1><p>Welcome, Agent Jason.</p><div style="font-size:150px; cursor:pointer;" onclick="showQuest()">🎮</div></div></div>
+        <div id="game-content"><div class="container-box"><h1>❤️ ACCESS GRANTED ❤️</h1><p>Welcome, Agent Jason.</p><div style="font-size:100px; cursor:pointer;" onclick="showQuest()">🎮</div></div></div>
+        
         <div id="quest-screen"><div class="container-box"><h2 id="level-title">MISSION 1</h2><p id="quest-question">What is my middle name?</p><input type="text" id="questInput"><br><button onclick="checkQuest()">SUBMIT</button></div></div>
-        <div id="madlibs-screen"><div class="container-box"><h2>MISSION 2</h2><p>Fill in the blanks!</p><input type="text" id="noun1" placeholder="Something you want"><input type="text" id="noun2" placeholder="An action"><input type="text" id="noun3" placeholder="Someone special"><br><button onclick="revealMadLib()">REVEAL STORY</button><div id="story-result" style="display:none; margin-top:20px;"><p id="final-story"></p><button onclick="showPacman()">NEXT MISSION</button></div></div></div>
-        <div id="pacman-screen"><div class="container-box"><h2>MISSION 3</h2><p>Eat the hearts! 👻 LIVES: <span id="life-count">3</span></p><div id="pacman-grid"></div><p>Use Arrow Keys to Move!</p></div></div>
-        <div id="clicker-screen"><div class="container-box"><h2>FINAL MISSION</h2><p>Click the heart!</p><div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div></div></div>
+
+        <div id="madlibs-screen">
+            <div class="container-box">
+                <h2>MISSION 2</h2>
+                <p>Fill in the blanks!</p>
+                <input type="text" id="noun1" placeholder="Something you want">
+                <input type="text" id="noun2" placeholder="An action">
+                <input type="text" id="noun3" placeholder="Someone special">
+                <br>
+                <button onclick="revealMadLib()">REVEAL STORY</button>
+                <div id="story-result" style="display:none; margin-top:20px;">
+                    <p id="final-story"></p>
+                    <button onclick="showPacman()">NEXT MISSION</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="pacman-screen">
+            <div class="container-box">
+                <h2>MISSION 3</h2>
+                <p>Eat the hearts! 👻 LIVES: <span id="life-count">3</span></p>
+                <div id="pacman-grid"></div>
+                <div class="d-pad">
+                    <div class="d-btn" style="grid-area: up" onclick="movePlayer(0,-1)">↑</div>
+                    <div class="d-btn" style="grid-area: left" onclick="movePlayer(-1,0)">←</div>
+                    <div class="d-btn" style="grid-area: right" onclick="movePlayer(1,0)">→</div>
+                    <div class="d-btn" style="grid-area: down" onclick="movePlayer(0,1)">↓</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="clicker-screen">
+            <div class="container-box">
+                <h2>FINAL MISSION</h2>
+                <p>Click the heart 20 times!</p>
+                <div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div>
+                <p id="click-count">Clicks: 0/20</p>
+            </div>
+        </div>
+
         <div id="final-prize"><div class="container-box"><h1>MISSION COMPLETE!!!</h1><p>I love you Jason!!!!!</p><p>Your prize is with MEEEEEE!</p></div></div>
 
         <script>
@@ -144,11 +202,9 @@
         let isSpinning = false;
 
         const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-        // The finger stop is at 0 degrees (right side / 3 o'clock)
-        const FINGER_STOP_ANGLE = 0; 
+        const STOP_ANGLE = 15; // Centered between 0 and 1
 
         numbers.forEach((num, index) => {
-            // Numbers 1-9 start at 30 deg intervals. 0 is the last.
             const angle = 330 - (index * 30); 
             const hole = document.createElement('div');
             hole.className = 'dial-hole';
@@ -163,32 +219,33 @@
 
         function spinToNumber(num, startAngle) {
             isSpinning = true;
-            
-            // Calculate distance to reach 0 degrees (The Finger Stop)
-            // If startAngle is 330, it needs to move 30 degrees to reach 0/360.
-            let targetRotation = (360 - startAngle);
-            if (targetRotation >= 360) targetRotation -= 360;
+            let targetRotation = (startAngle - STOP_ANGLE);
+            if (targetRotation < 0) targetRotation += 360;
 
-            dialWheel.style.transition = "transform 0.7s cubic-bezier(0.1, 0, 0.3, 1)";
+            dialWheel.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
             dialWheel.style.transform = `rotate(${targetRotation}deg)`;
 
+            // Wait for overlap before showing number
             setTimeout(() => {
                 dialedCode += num;
                 display.innerText = dialedCode.padEnd(8, "_");
-                dialWheel.style.transition = "transform 0.6s ease-out";
-                dialWheel.style.transform = `rotate(0deg)`;
+                
+                // Return animation
                 setTimeout(() => {
-                    isSpinning = false;
-                    if (dialedCode.length === 8) checkCode();
-                }, 600);
-            }, 750);
+                    dialWheel.style.transition = "transform 0.6s ease-out";
+                    dialWheel.style.transform = `rotate(0deg)`;
+                    setTimeout(() => {
+                        isSpinning = false;
+                        if (dialedCode.length === 8) checkCode();
+                    }, 600);
+                }, 200);
+            }, 800);
         }
 
         function checkCode() {
             if (dialedCode === correctCode) showScreen('game-content');
             else { alert("Incorrect Code!"); resetDial(); }
         }
-
         function resetDial() { dialedCode = ""; display.innerText = "________"; }
 
         // --- NAVIGATION ---
@@ -197,9 +254,9 @@
             screens.forEach(s => document.getElementById(s).style.display = 'none');
             document.getElementById(id).style.display = 'block';
         }
-
         function showQuest() { showScreen('quest-screen'); }
 
+        // --- QUEST LOGIC ---
         var currentLevel = 0;
         var questData = [
             {q: "What is my middle name?", a: "harmony"},
@@ -208,7 +265,6 @@
             {q: "What do I do not like about some food but love about desserts?", a: "sweet"},
             {q: "How old was I when I got my ears pierced?", a: "12"}
         ];
-
         function checkQuest() {
             var input = document.getElementById('questInput').value.toLowerCase().trim();
             if (input === questData[currentLevel].a) {
@@ -244,7 +300,6 @@
         let lives = 3;
 
         function showPacman() { showScreen('pacman-screen'); drawMaze(); }
-
         function drawMaze() {
             const grid = document.getElementById('pacman-grid');
             grid.innerHTML = '';
@@ -268,9 +323,7 @@
             if (currentMaze[ny][nx] !== 1) {
                 pacPos = {x: nx, y: ny};
                 currentMaze[ny][nx] = 2; 
-                
                 moveGhost();
-
                 if (pacPos.x === ghostPos.x && pacPos.y === ghostPos.y) {
                     lives--;
                     document.getElementById('life-count').innerText = lives;
@@ -283,16 +336,13 @@
 
         function moveGhost() {
             const dirs = [{x:0,y:1},{x:0,y:-1},{x:1,y:0},{x:-1,y:0}];
-            
-            // Fix: 25% chance to take a "confused" backstep instead of tracking Jason
             if (Math.random() < 0.25) {
-                let randomDir = dirs[Math.floor(Math.random() * dirs.length)];
-                let nx = ghostPos.x + randomDir.x, ny = ghostPos.y + randomDir.y;
-                if (maze[ny][nx] !== 1) { ghostPos.x = nx; ghostPos.y = ny; return; }
+                let rd = dirs[Math.floor(Math.random() * dirs.length)];
+                if (maze[ghostPos.y+rd.y][ghostPos.x+rd.x] !== 1) {
+                    ghostPos.x += rd.x; ghostPos.y += rd.y; return;
+                }
             }
-
-            let bestDir = dirs[0];
-            let minDist = Infinity;
+            let bestDir = dirs[0], minDist = Infinity;
             dirs.forEach(d => {
                 let nx = ghostPos.x + d.x, ny = ghostPos.y + d.y;
                 if (maze[ny][nx] !== 1) {
@@ -304,19 +354,24 @@
         }
 
         window.addEventListener('keydown', e => {
-            if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) e.preventDefault();
-            if (e.key === "ArrowUp") movePlayer(0, -1);
-            if (e.key === "ArrowDown") movePlayer(0, 1);
-            if (e.key === "ArrowLeft") movePlayer(-1, 0);
-            if (e.key === "ArrowRight") movePlayer(1, 0);
+            if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) {
+                e.preventDefault();
+                if (e.key === "ArrowUp") movePlayer(0, -1);
+                if (e.key === "ArrowDown") movePlayer(0, 1);
+                if (e.key === "ArrowLeft") movePlayer(-1, 0);
+                if (e.key === "ArrowRight") movePlayer(1, 0);
+            }
         });
 
+        // --- FINAL CLICKER ---
         let clicks = 0;
         function heartClicked() {
             clicks++;
             let h = document.getElementById('growingHeart');
-            h.style.transform = `scale(${1 + clicks * 0.5})`;
-            if (clicks > 10) showScreen('final-prize');
+            let c = document.getElementById('click-count');
+            h.style.transform = `scale(${1 + clicks * 0.15})`;
+            c.innerText = `Clicks: ${clicks}/20`;
+            if (clicks >= 20) showScreen('final-prize');
         }
         </script>
     </body>
