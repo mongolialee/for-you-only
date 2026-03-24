@@ -214,7 +214,8 @@
 
         function spinToNumber(num, startAngle) {
             isSpinning = true;
-            // Calculate clockwise distance to stop
+            
+            // Fix 1: Strictly Clockwise calculation
             let targetRotation = startAngle - FINGER_STOP_ANGLE;
             if (targetRotation < 0) targetRotation += 360;
 
@@ -291,6 +292,7 @@
         let pacPos = { x: 1, y: 1 };
         let ghostPos = { x: 13, y: 13 };
         let lives = 3;
+        let ghostMoveCounter = 0; // Fix 2: For lagging the ghost
 
         function showPacman() { showScreen('pacman-screen'); drawMaze(); }
 
@@ -317,7 +319,13 @@
             if (currentMaze[ny][nx] !== 1) {
                 pacPos = {x: nx, y: ny};
                 currentMaze[ny][nx] = 2; // Eat dot
-                moveGhost();
+                
+                // Fix 2: Ghost only moves every second turn
+                ghostMoveCounter++;
+                if(ghostMoveCounter % 2 === 0) {
+                    moveGhost();
+                }
+
                 if (pacPos.x === ghostPos.x && pacPos.y === ghostPos.y) {
                     lives--;
                     document.getElementById('life-count').innerText = lives;
