@@ -273,112 +273,72 @@
         </div>
 
         <script>
-            // --- ROTARY DIAL LOGIC ---
-            const dialWheel = document.getElementById('dial-wheel');
-            const display = document.getElementById('dial-display');
-            const phoneBase = document.getElementById('phone-base');
-            const correctCode = "11092023";
-            let dialedCode = "";
-            let isDragging = false;
-            let startAngle = 0;
-            let currentRotation = 0;
-            let activeNumber = null;
-            const STOP_ANGLE = 155; // The angle of the Finger Stop
-            const POINTER_ANGLE = 300;
+        // --- ROTARY DIAL LOGIC ---
+        const dialWheel = document.getElementById('dial-wheel');
+        const display = document.getElementById('dial-display');
+        const phoneBase = document.getElementById('phone-base');
+        const correctCode = "11092023";
+        let dialedCode = "";
+        let isSpinning = false; // Prevent double-clicks during animation
 
-            const numbers = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-            const holeAngles = [];
+        const customAngles = {
+            1: 330, 2: 300, 3: 270, 4: 240, 5: 210, 
+            6: 180, 7: 150, 8: 120, 9: 90, 0: 30
+        };
 
-            const customAngles = {
-                1: 330, 2: 300, 3: 270, 4: 240, 5: 210, 
-                6: 180, 7: 150, 8: 120, 9: 90, 0: 30
+        // Target angle where the "Finger Stop" is (roughly 30-40 degrees)
+        const FINGER_STOP_TARGET = 40;
+
+        Object.keys(customAngles).forEach((num) => {
+            const startAngle = customAngles[num];
+            const hole = document.createElement('div');
+            hole.className = 'dial-hole';
+            hole.innerText = num;
+
+            // Position holes in a circle
+            const radius = 95; 
+            const radian = startAngle * (Math.PI / 180);
+            const x = 130 + radius * Math.cos(radian);
+            const y = 130 - radius * Math.sin(radian); // Subtract Y because CSS top is downward
+
+            hole.style.left = x + 'px';
+            hole.style.top = y + 'px';
+
+            // Click to Auto-Spin
+            hole.onclick = () => {
+                if (isSpinning) return;
+                spinToNumber(num, startAngle);
             };
+            dialWheel.appendChild(hole);
+        });
 
-            const STOP_ANGLE = 30;
-            
-            numbers.forEach((num) => {
-                const degree = customAngles[num];
-                holeAngles[num] = degree;
-                
-                const radian = degree * (Math.PI / 180);
+        function spinToNumber(num, startAngle) {
+            isSpinning = true;
+    
+            // Calculate how far we need to rotate to hit the finger stop
+            // We want (startAngle - currentRotation) to end up at FINGER_STOP_TARGET
+            const travelDistance = startAngle - FINGER_STOP_TARGET;
 
-                const hole = document.createElement('div');
-                    hole.className = 'dial-hole';
-                    hole.innerText = num;
+            dialWheel.style.transition = "transform 0.5s ease-in";
+            dialWheel.style.transform = `rotate(${travelDistance}deg)`;
 
-                const radius = 90;
-                // Now the X and Y will actually calculate a circle
-                const x = 130 + radius * Math.cos(radius);
-                const y = 130 + radius * Math.sin(radius);
+            // Wait for spin to finish, then snap back
+            setTimeout(() => {
+                // Add number to display
+                dialedCode += num;
+                display.innerText = dialedCode.padEnd(8, "_");
 
-                hole.style.left = x + 'px';
-                hole.style.top = y + 'px';
-
-                hole.onpointerdown = (e) => startDial(e, num);
-                dialWheel.appendChild(hole);
-            });
-
-            function getAngle(x, y) {
-                const rect = phoneBase.getBoundingClientRect();
-                return Math.atan2(y - (rect.top + rect.height/2), x - (rect.left + rect.width/2)) * 180 / Math.PI;
-            }
-
-            let startNumberAngle = 0;
-            function startDial(e, num) {
-                isDragging = true;
-                activeNumber = num;
-                startAngle = getAngle(e.clientX, e.clientY);
-                startNumberAngle = holeAngles[num];
-                dialWheel.style.transition = "none";
-            }
-             //DRAGGING
-            window.onmousemove = (e) => {
-                if (!isDragging) return;
-                const currentAngle = getAngle(e.clientX, e.clientY);
-                let diff = currentAngle - startAngle;
-                if (diff < 0) return;
-                if (diff > STOP_ANGLE) diff = STOP_ANGLE;
-                currentRotation = diff;
-                dialWheel.style.transform = `rotate(${currentRotation}deg)`;
-            };
-
-            //RELEASE
-            window.onmouseup = () => {
-                if (!isDragging) return;
-                isDragging = false;
-                const SNAP_THRESHOLD = 12;
-                let finalAngle = (startNumberAngle + currentRotation) % 360;
-
-                if (finalAngle < 0) finalAngle += 360;
-                let diff = Math.abs(finalAngle - POINTER_ANGLE);
-                if (diff > 180) diff = 360 - diff;
-                if (diff < SNAP_THRESHOLD) {
-                    dialedCode += activeNumber;
-                    display.innerText = dialedCode.padEnd(8, "_");
-
-                    if (dialedCode.length === 8) {
-                        checkCode();
-                    }
-                }
-                //RETURN TO START
+                // Snap back animation
                 dialWheel.style.transition = "transform 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95)";
                 dialWheel.style.transform = `rotate(0deg)`;
-                currentRotation = 0;
-                activeNumber = null;
-            };
 
-            window.ontouchmove = (e) => window.onmousemove(e.touches[0]);
-            window.ontouchend = () => window.onmouseup();
-
-            function checkCode() {
-                if (dialedCode === correctCode) {
-                    setTimeout(() => showScreen('game-content'), 500);
-                } else {
-                    setTimeout(() => { alert("HOW DARE YOU GET THIS WRONG!!!👿"); 
-                                      resetDial(); 
-                                     }, 500);
-                }
+                setTimeout(() => {
+                    isSpinning = false;
+                    if (dialedCode.length === 8) checkCode();
+                    }, 600);
+                }, 500);
             }
+            
             function resetDial() { 
                 dialedCode = ""; 
                 display.innerText = "________"; 
@@ -557,14 +517,24 @@
             ghostPos = step;
         }
 
+            let lives = 3;
+            
             function checkCollision() {
                 if (pacPos.x === ghostPos.x && pacPos.y === ghostPos.y) {
-                    alert("GHOST CAUGHT YOU! 👻 You had to start over!");
-                    pacPos = { x: 1, y: 1 };
-                    ghostPos = { x: 13, y: 13 };
-                    currentMaze = JSON.parse(JSON.stringify(initialMaze));
+                    lives--;
+                    if (lives > 0) {
+                        alert("AHAHAH! YOU GOT CAUGHT!!! 👻 Lives left: " + lives);
+                        // Reset positions but keep progress
+                        pacPos = { x: 1, y: 1 };
+                        ghostPos = { x: 13, y: 13 };
+                        drawMaze();
+                    } else {
+                    // GAME OVER TRIGGER
+                alert("GAME OVER, AGENT JASON! ❌ TOO SLOWWWW!! RESTART!");
+                location.reload(); // Restarts the whole game
                 }
             }
+        }
 
             window.addEventListener('keydown', (e) => {
                 if (document.getElementById('pacman-screen').style.display === 'block') {
