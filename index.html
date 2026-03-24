@@ -71,7 +71,7 @@
                 border: 2px solid #da1e76;
                 font-size: 18px;
             }
-            /* YOUR SPECIFIC PIN POSITION */
+            /* YOUR SPECIFIC PIN POSITION KEPT */
             .finger-stop {
                 position: absolute;
                 width: 12px;
@@ -136,11 +136,13 @@
                     <div class="finger-stop"></div>
                     <div id="dial-wheel"></div>
                 </div>
+                <p>Hint: Our Anniversary 😏</p>
                 <button onclick="resetDial()">RESET</button>
             </div>
         </div>
 
         <div id="game-content"><div class="container-box"><h1>❤️ ACCESS GRANTED ❤️</h1><p>Welcome, Agent Jason.</p><div style="font-size:100px; cursor:pointer;" onclick="showQuest()">🎮</div></div></div>
+        
         <div id="quest-screen"><div class="container-box"><h2 id="level-title">MISSION 1</h2><p id="quest-question">What is my middle name?</p><input type="text" id="questInput"><br><button onclick="checkQuest()">SUBMIT</button></div></div>
 
         <div id="madlibs-screen">
@@ -177,7 +179,7 @@
                 <h2>FINAL MISSION</h2>
                 <p>SHOW ME SOME LOVEEEE!</p>
                 <div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div>
-                <p id="click-count">Clicks: 0/20</p>
+                <p id="click-status">Clicks: 0/20</p>
             </div>
         </div>
 
@@ -191,12 +193,11 @@
         let isSpinning = false;
 
         const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-        // ADJUSTED STOP ANGLE to match your bottom-right pin position
-        const STOP_ANGLE = 330; 
+        // Adjusted STOP_ANGLE to match your current finger-stop CSS (approx -15 deg or 345 deg)
+        const STOP_ANGLE = 345; 
 
         numbers.forEach((num, index) => {
-            // Distribute numbers around the left/top side initially
-            const angle = 210 - (index * 24); 
+            const angle = 300 - (index * 30); 
             const hole = document.createElement('div');
             hole.className = 'dial-hole';
             hole.innerText = num;
@@ -210,18 +211,20 @@
 
         function spinToNumber(num, startAngle) {
             isSpinning = true;
-            // Calculate how far to rotate to reach the metal stop
+            // Calculate distance to move clockwise to the pin
             let targetRotation = (startAngle - STOP_ANGLE);
-            // Ensure clockwise rotation logic
             if (targetRotation < 0) targetRotation += 360;
 
             dialWheel.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
             dialWheel.style.transform = `rotate(${targetRotation}deg)`;
 
             setTimeout(() => {
+                // This happens exactly when the hole hits the pin
                 dialedCode += num;
                 display.innerText = dialedCode.padEnd(8, "_");
+                
                 setTimeout(() => {
+                    // Return to home position
                     dialWheel.style.transition = "transform 0.6s ease-out";
                     dialWheel.style.transform = `rotate(0deg)`;
                     setTimeout(() => {
@@ -271,36 +274,56 @@
             document.getElementById('story-result').style.display = 'block';
         }
 
-        // Pacman Logic
-        const maze = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],[1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],[1,0,1,1,0,1,1,1,1,1,0,1,1,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,1,1,0,1,1,0,1,0,1,1,0,1,1,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],[1,1,1,0,1,1,0,1,0,1,1,0,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,1,1,0,1,1,1,1,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],[1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
+        const maze = [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+            [1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
+            [1,0,1,1,0,1,1,1,1,1,0,1,1,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,0,1,1,0,1,0,1,1,0,1,1,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+            [1,1,1,0,1,1,0,1,0,1,1,0,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,1,1,0,1,1,1,1,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
+            [1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
         let currentMaze = JSON.parse(JSON.stringify(maze));
-        let pacPos = { x: 1, y: 1 }, ghostPos = { x: 13, y: 13 }, lives = 3;
+        let pacPos = { x: 1, y: 1 };
+        let ghostPos = { x: 13, y: 13 };
+        let lives = 3;
 
         function showPacman() { showScreen('pacman-screen'); drawMaze(); }
         function drawMaze() {
-            const grid = document.getElementById('pacman-grid'); grid.innerHTML = ''; let dots = 0;
-            currentMaze.forEach((row, y) => { row.forEach((cell, x) => {
-                const div = document.createElement('div'); div.className = 'cell';
-                if (cell === 1) div.classList.add('wall');
-                else if (x === pacPos.x && y === pacPos.y) div.innerText = '😋';
-                else if (x === ghostPos.x && y === ghostPos.y) div.innerText = '👻';
-                else if (cell === 0) { div.innerHTML = '<span class="dot">❣</span>'; dots++; }
-                grid.appendChild(div);
-            }); });
+            const grid = document.getElementById('pacman-grid');
+            grid.innerHTML = '';
+            let dots = 0;
+            currentMaze.forEach((row, y) => {
+                row.forEach((cell, x) => {
+                    const div = document.createElement('div');
+                    div.className = 'cell';
+                    if (cell === 1) div.classList.add('wall');
+                    else if (x === pacPos.x && y === pacPos.y) div.innerText = '😋';
+                    else if (x === ghostPos.x && y === ghostPos.y) div.innerText = '👻';
+                    else if (cell === 0) { div.innerHTML = '<span class="dot">❣</span>'; dots++; }
+                    grid.appendChild(div);
+                });
+            });
             if (dots === 0) showScreen('clicker-screen');
         }
+
         function movePlayer(dx, dy) {
             let nx = pacPos.x + dx, ny = pacPos.y + dy;
             if (currentMaze[ny][nx] !== 1) {
-                pacPos = {x: nx, y: ny}; currentMaze[ny][nx] = 2; moveGhost();
+                pacPos = {x: nx, y: ny};
+                currentMaze[ny][nx] = 2; 
+                moveGhost();
                 if (pacPos.x === ghostPos.x && pacPos.y === ghostPos.y) {
-                    lives--; document.getElementById('life-count').innerText = lives;
+                    lives--;
+                    document.getElementById('life-count').innerText = lives;
                     if (lives <= 0) { alert("GAME OVER!"); location.reload(); }
                     else { alert("Ouch!"); pacPos = {x:1, y:1}; ghostPos = {x:13, y:13}; }
                 }
                 drawMaze();
             }
         }
+
         function moveGhost() {
             const dirs = [{x:0,y:1},{x:0,y:-1},{x:1,y:0},{x:-1,y:0}];
             let bestDir = dirs[0], minDist = Infinity;
@@ -318,7 +341,7 @@
         function heartClicked() {
             clicks++;
             document.getElementById('growingHeart').style.transform = `scale(${1 + clicks * 0.1})`;
-            document.getElementById('click-count').innerText = `Clicks: ${clicks}/20`;
+            document.getElementById('click-status').innerText = `Clicks: ${clicks}/20`;
             if (clicks >= 20) showScreen('final-prize');
         }
         </script>
