@@ -68,17 +68,18 @@
                 border: 2px solid #da1e76;
                 font-size: 18px;
             }
+            /* FIXED TO EXACTLY 90 DEGREES */
             .finger-stop {
                 position: absolute;
                 width: 12px;
                 height: 55px;
                 background: linear-gradient(to bottom, #bbb, #777);
-                top: 135px;
-                right: 18px;
+                top: 50%;
+                right: 10px;
                 z-index: 5;
                 border-radius: 5px;
-                transform: rotate(-60deg);
-                box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+                transform: translateY(-50%); /* Perfectly centered at 90 deg / 3 o'clock */
+                box-shadow: 2px 0px 5px rgba(0,0,0,0.5);
             }
             #dial-display {
                 font-size: 26px;
@@ -106,9 +107,7 @@
             .wall { background-color: #ffb3d9; }
             .dot { color: #ff4d4d; font-size: 10px; }
 
-            /* Hiding screens initially */
             #game-content, #quest-screen, #madlibs-screen, #clicker-screen, #pacman-screen, #final-prize { display: none; }
-            
             button { background-color: #ff4d4d; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
             input { padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin: 10px 0; width: 85%; }
             .heart-btn { font-size: 100px; cursor: pointer; transition: transform 0.2s; }
@@ -129,64 +128,12 @@
             </div>
         </div>
 
-        <div id="game-content">
-            <div class="container-box">
-                <h1>❤️ ACCESS GRANTED ❤️</h1>
-                <p>Welcome, Agent Jason.</p>
-                <div style="font-size:150px; cursor:pointer;" onclick="showQuest()">🎮</div>
-            </div>
-        </div>
-
-        <div id="quest-screen">
-            <div class="container-box">
-                <h2 id="level-title">MISSION 1</h2>
-                <p id="quest-question">What is my middle name?</p>
-                <input type="text" id="questInput">
-                <br>
-                <button onclick="checkQuest()">SUBMIT</button>
-            </div>
-        </div>
-
-        <div id="madlibs-screen">
-            <div class="container-box">
-                <h2>MISSION 2</h2>
-                <p>Fill in the blanks!</p>
-                <input type="text" id="noun1" placeholder="Something you want">
-                <input type="text" id="noun2" placeholder="An action">
-                <input type="text" id="noun3" placeholder="Someone special">
-                <br>
-                <button onclick="revealMadLib()">REVEAL STORY</button>
-                <div id="story-result" style="display:none; margin-top:20px;">
-                    <p id="final-story"></p>
-                    <button onclick="showPacman()">NEXT MISSION</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="pacman-screen">
-            <div class="container-box">
-                <h2>MISSION 3</h2>
-                <p>Eat the hearts! 👻 LIVES: <span id="life-count">3</span></p>
-                <div id="pacman-grid"></div>
-                <p>Use Arrow Keys to Move!</p>
-            </div>
-        </div>
-
-        <div id="clicker-screen">
-            <div class="container-box">
-                <h2>FINAL MISSION</h2>
-                <p>Click the heart!</p>
-                <div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div>
-            </div>
-        </div>
-
-        <div id="final-prize">
-            <div class="container-box">
-                <h1>MISSION COMPLETE!!!</h1>
-                <p>I love you Jason!!!!!</p>
-                <p>Your prize is with MEEEEEE!</p>
-            </div>
-        </div>
+        <div id="game-content"><div class="container-box"><h1>❤️ ACCESS GRANTED ❤️</h1><p>Welcome, Agent Jason.</p><div style="font-size:150px; cursor:pointer;" onclick="showQuest()">🎮</div></div></div>
+        <div id="quest-screen"><div class="container-box"><h2 id="level-title">MISSION 1</h2><p id="quest-question">What is my middle name?</p><input type="text" id="questInput"><br><button onclick="checkQuest()">SUBMIT</button></div></div>
+        <div id="madlibs-screen"><div class="container-box"><h2>MISSION 2</h2><p>Fill in the blanks!</p><input type="text" id="noun1" placeholder="Something you want"><input type="text" id="noun2" placeholder="An action"><input type="text" id="noun3" placeholder="Someone special"><br><button onclick="revealMadLib()">REVEAL STORY</button><div id="story-result" style="display:none; margin-top:20px;"><p id="final-story"></p><button onclick="showPacman()">NEXT MISSION</button></div></div></div>
+        <div id="pacman-screen"><div class="container-box"><h2>MISSION 3</h2><p>Eat the hearts! 👻 LIVES: <span id="life-count">3</span></p><div id="pacman-grid"></div><p>Use Arrow Keys to Move!</p></div></div>
+        <div id="clicker-screen"><div class="container-box"><h2>FINAL MISSION</h2><p>Click the heart!</p><div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div></div></div>
+        <div id="final-prize"><div class="container-box"><h1>MISSION COMPLETE!!!</h1><p>I love you Jason!!!!!</p><p>Your prize is with MEEEEEE!</p></div></div>
 
         <script>
         // --- DIAL LOGIC ---
@@ -197,9 +144,11 @@
         let isSpinning = false;
 
         const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-        const FINGER_STOP_ANGLE = 40; 
+        // The finger stop is at 0 degrees (right side / 3 o'clock)
+        const FINGER_STOP_ANGLE = 0; 
 
         numbers.forEach((num, index) => {
+            // Numbers 1-9 start at 30 deg intervals. 0 is the last.
             const angle = 330 - (index * 30); 
             const hole = document.createElement('div');
             hole.className = 'dial-hole';
@@ -215,23 +164,24 @@
         function spinToNumber(num, startAngle) {
             isSpinning = true;
             
-            // Fix 1: Strictly Clockwise calculation
-            let targetRotation = startAngle - FINGER_STOP_ANGLE;
-            if (targetRotation < 0) targetRotation += 360;
+            // Calculate distance to reach 0 degrees (The Finger Stop)
+            // If startAngle is 330, it needs to move 30 degrees to reach 0/360.
+            let targetRotation = (360 - startAngle);
+            if (targetRotation >= 360) targetRotation -= 360;
 
-            dialWheel.style.transition = "transform 0.6s ease-in";
+            dialWheel.style.transition = "transform 0.7s cubic-bezier(0.1, 0, 0.3, 1)";
             dialWheel.style.transform = `rotate(${targetRotation}deg)`;
 
             setTimeout(() => {
                 dialedCode += num;
                 display.innerText = dialedCode.padEnd(8, "_");
-                dialWheel.style.transition = "transform 0.5s ease-out";
+                dialWheel.style.transition = "transform 0.6s ease-out";
                 dialWheel.style.transform = `rotate(0deg)`;
                 setTimeout(() => {
                     isSpinning = false;
                     if (dialedCode.length === 8) checkCode();
-                }, 500);
-            }, 600);
+                }, 600);
+            }, 750);
         }
 
         function checkCode() {
@@ -292,7 +242,6 @@
         let pacPos = { x: 1, y: 1 };
         let ghostPos = { x: 13, y: 13 };
         let lives = 3;
-        let ghostMoveCounter = 0; // Fix 2: For lagging the ghost
 
         function showPacman() { showScreen('pacman-screen'); drawMaze(); }
 
@@ -318,13 +267,9 @@
             let nx = pacPos.x + dx, ny = pacPos.y + dy;
             if (currentMaze[ny][nx] !== 1) {
                 pacPos = {x: nx, y: ny};
-                currentMaze[ny][nx] = 2; // Eat dot
+                currentMaze[ny][nx] = 2; 
                 
-                // Fix 2: Ghost only moves every second turn
-                ghostMoveCounter++;
-                if(ghostMoveCounter % 2 === 0) {
-                    moveGhost();
-                }
+                moveGhost();
 
                 if (pacPos.x === ghostPos.x && pacPos.y === ghostPos.y) {
                     lives--;
@@ -338,6 +283,14 @@
 
         function moveGhost() {
             const dirs = [{x:0,y:1},{x:0,y:-1},{x:1,y:0},{x:-1,y:0}];
+            
+            // Fix: 25% chance to take a "confused" backstep instead of tracking Jason
+            if (Math.random() < 0.25) {
+                let randomDir = dirs[Math.floor(Math.random() * dirs.length)];
+                let nx = ghostPos.x + randomDir.x, ny = ghostPos.y + randomDir.y;
+                if (maze[ny][nx] !== 1) { ghostPos.x = nx; ghostPos.y = ny; return; }
+            }
+
             let bestDir = dirs[0];
             let minDist = Infinity;
             dirs.forEach(d => {
@@ -351,13 +304,13 @@
         }
 
         window.addEventListener('keydown', e => {
+            if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) e.preventDefault();
             if (e.key === "ArrowUp") movePlayer(0, -1);
             if (e.key === "ArrowDown") movePlayer(0, 1);
             if (e.key === "ArrowLeft") movePlayer(-1, 0);
             if (e.key === "ArrowRight") movePlayer(1, 0);
         });
 
-        // --- FINAL CLICKER ---
         let clicks = 0;
         function heartClicked() {
             clicks++;
