@@ -71,7 +71,7 @@
                 border: 2px solid #da1e76;
                 font-size: 18px;
             }
-            /* REVERTED PIN POSITION */
+            /* YOUR SPECIFIC PIN POSITION */
             .finger-stop {
                 position: absolute;
                 width: 12px;
@@ -136,29 +136,12 @@
                     <div class="finger-stop"></div>
                     <div id="dial-wheel"></div>
                 </div>
-                <p>Hint: Your credit card number 😏</p>
                 <button onclick="resetDial()">RESET</button>
             </div>
         </div>
 
-        <div id="game-content">
-            <div class="container-box">
-                <h1>❤️ ACCESS GRANTED ❤️</h1>
-                <p>Welcome, Agent Jason.</p>
-                <div style="font-size:100px; 
-                    cursor:pointer;" 
-                    onclick="showQuest()">🎮</div>
-            </div>
-        </div>
-        <div id="quest-screen">
-            <div class="container-box">
-                <h2 id="level-title">MISSION 1</h2>
-                <p id="quest-question">What is my middle name?</p>
-                <input type="text" id="questInput">
-                <br>
-                <button onclick="checkQuest()">SUBMIT</button>
-            </div>
-        </div>
+        <div id="game-content"><div class="container-box"><h1>❤️ ACCESS GRANTED ❤️</h1><p>Welcome, Agent Jason.</p><div style="font-size:100px; cursor:pointer;" onclick="showQuest()">🎮</div></div></div>
+        <div id="quest-screen"><div class="container-box"><h2 id="level-title">MISSION 1</h2><p id="quest-question">What is my middle name?</p><input type="text" id="questInput"><br><button onclick="checkQuest()">SUBMIT</button></div></div>
 
         <div id="madlibs-screen">
             <div class="container-box">
@@ -194,16 +177,11 @@
                 <h2>FINAL MISSION</h2>
                 <p>SHOW ME SOME LOVEEEE!</p>
                 <div id="growingHeart" class="heart-btn" onclick="heartClicked()">❤️</div>
+                <p id="click-count">Clicks: 0/20</p>
             </div>
         </div>
 
-        <div id="final-prize">
-            <div class="container-box">
-                <h1>MISSION COMPLETE!!!</h1>
-                <p>Your prize is........... with MEEEEEE!</p>
-                <p>MWAHAHAHAHAHA</p>
-            </div>
-        </div>
+        <div id="final-prize"><div class="container-box"><h1>MISSION COMPLETE!!!</h1><p>Your prize is........... with MEEEEEE!</p><p>MWAHAHAHAHAHA</p></div></div>
 
         <script>
         const dialWheel = document.getElementById('dial-wheel');
@@ -213,10 +191,12 @@
         let isSpinning = false;
 
         const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-        const STOP_ANGLE = 45; // Match original stop placement
+        // ADJUSTED STOP ANGLE to match your bottom-right pin position
+        const STOP_ANGLE = 330; 
 
         numbers.forEach((num, index) => {
-            const angle = 300 - (index * 30); 
+            // Distribute numbers around the left/top side initially
+            const angle = 210 - (index * 24); 
             const hole = document.createElement('div');
             hole.className = 'dial-hole';
             hole.innerText = num;
@@ -230,7 +210,9 @@
 
         function spinToNumber(num, startAngle) {
             isSpinning = true;
+            // Calculate how far to rotate to reach the metal stop
             let targetRotation = (startAngle - STOP_ANGLE);
+            // Ensure clockwise rotation logic
             if (targetRotation < 0) targetRotation += 360;
 
             dialWheel.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
@@ -289,64 +271,38 @@
             document.getElementById('story-result').style.display = 'block';
         }
 
-        const maze = [
-            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
-            [1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
-            [1,0,1,1,0,1,1,1,1,1,0,1,1,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,1,1,0,1,1,0,1,0,1,1,0,1,1,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
-            [1,1,1,0,1,1,0,1,0,1,1,0,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-            [1,0,1,1,0,1,1,1,1,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],
-            [1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],
-            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        ];
+        // Pacman Logic
+        const maze = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],[1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],[1,0,1,1,0,1,1,1,1,1,0,1,1,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,1,1,0,1,1,0,1,0,1,1,0,1,1,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],[1,1,1,0,1,1,0,1,0,1,1,0,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,1,1,0,1,1,1,1,1,0,1,1,0,1],[1,0,0,0,0,1,0,0,0,1,0,0,0,0,1],[1,0,1,1,0,1,0,1,0,1,0,1,1,0,1],[1,0,0,0,0,0,0,1,0,0,0,0,0,0,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
         let currentMaze = JSON.parse(JSON.stringify(maze));
-        let pacPos = { x: 1, y: 1 };
-        let ghostPos = { x: 13, y: 13 };
-        let lives = 3;
+        let pacPos = { x: 1, y: 1 }, ghostPos = { x: 13, y: 13 }, lives = 3;
 
         function showPacman() { showScreen('pacman-screen'); drawMaze(); }
         function drawMaze() {
-            const grid = document.getElementById('pacman-grid');
-            grid.innerHTML = '';
-            let dots = 0;
-            currentMaze.forEach((row, y) => {
-                row.forEach((cell, x) => {
-                    const div = document.createElement('div');
-                    div.className = 'cell';
-                    if (cell === 1) div.classList.add('wall');
-                    else if (x === pacPos.x && y === pacPos.y) div.innerText = '😋';
-                    else if (x === ghostPos.x && y === ghostPos.y) div.innerText = '👻';
-                    else if (cell === 0) { div.innerHTML = '<span class="dot">❣</span>'; dots++; }
-                    grid.appendChild(div);
-                });
-            });
+            const grid = document.getElementById('pacman-grid'); grid.innerHTML = ''; let dots = 0;
+            currentMaze.forEach((row, y) => { row.forEach((cell, x) => {
+                const div = document.createElement('div'); div.className = 'cell';
+                if (cell === 1) div.classList.add('wall');
+                else if (x === pacPos.x && y === pacPos.y) div.innerText = '😋';
+                else if (x === ghostPos.x && y === ghostPos.y) div.innerText = '👻';
+                else if (cell === 0) { div.innerHTML = '<span class="dot">❣</span>'; dots++; }
+                grid.appendChild(div);
+            }); });
             if (dots === 0) showScreen('clicker-screen');
         }
-
         function movePlayer(dx, dy) {
             let nx = pacPos.x + dx, ny = pacPos.y + dy;
             if (currentMaze[ny][nx] !== 1) {
-                pacPos = {x: nx, y: ny};
-                currentMaze[ny][nx] = 2; 
-                moveGhost();
+                pacPos = {x: nx, y: ny}; currentMaze[ny][nx] = 2; moveGhost();
                 if (pacPos.x === ghostPos.x && pacPos.y === ghostPos.y) {
-                    lives--;
-                    document.getElementById('life-count').innerText = lives;
+                    lives--; document.getElementById('life-count').innerText = lives;
                     if (lives <= 0) { alert("GAME OVER!"); location.reload(); }
                     else { alert("Ouch!"); pacPos = {x:1, y:1}; ghostPos = {x:13, y:13}; }
                 }
                 drawMaze();
             }
         }
-
         function moveGhost() {
             const dirs = [{x:0,y:1},{x:0,y:-1},{x:1,y:0},{x:-1,y:0}];
-            if (Math.random() < 0.25) {
-                let rd = dirs[Math.floor(Math.random() * dirs.length)];
-                if (maze[ghostPos.y+rd.y][ghostPos.x+rd.x] !== 1) {
-                    ghostPos.x += rd.x; ghostPos.y += rd.y; return;
-                }
-            }
             let bestDir = dirs[0], minDist = Infinity;
             dirs.forEach(d => {
                 let nx = ghostPos.x + d.x, ny = ghostPos.y + d.y;
@@ -358,23 +314,11 @@
             ghostPos.x += bestDir.x; ghostPos.y += bestDir.y;
         }
 
-        window.addEventListener('keydown', e => {
-            if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) {
-                e.preventDefault();
-                if (e.key === "ArrowUp") movePlayer(0, -1);
-                if (e.key === "ArrowDown") movePlayer(0, 1);
-                if (e.key === "ArrowLeft") movePlayer(-1, 0);
-                if (e.key === "ArrowRight") movePlayer(1, 0);
-            }
-        });
-
         let clicks = 0;
         function heartClicked() {
             clicks++;
-            let h = document.getElementById('growingHeart');
-            let c = document.getElementById('click-count');
-            h.style.transform = `scale(${1 + clicks * 0.1})`;
-            c.innerText = `Clicks: ${clicks}/20`;
+            document.getElementById('growingHeart').style.transform = `scale(${1 + clicks * 0.1})`;
+            document.getElementById('click-count').innerText = `Clicks: ${clicks}/20`;
             if (clicks >= 20) showScreen('final-prize');
         }
         </script>
